@@ -3,11 +3,11 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import errorHandler from './error-handler'
+import errorHandlerPlugin from '@/plugins/errorHandler'
 
 const app = createApp(App)
 
-app.use(errorHandler)
+app.use(errorHandlerPlugin)
 app.use(createPinia())
 app.use(router)
 
