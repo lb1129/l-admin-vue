@@ -68,9 +68,9 @@ Commit Message 包括 `type`、`scope`、`subject` 三部分，其中 `type`、`
 
 ## 命名规范
 
-- **组件** 采用 `UpperCamelCase` 命名法
-- **目录** 采用 `kebab-case` 命名法
-- **其他** 采用 `kebab-case` 命名法
+- **组件文件名称** 采用 `UpperCamelCase` 命名法
+- **目录名称** 采用 `kebab-case` 命名法
+- **其他文件名称** 采用 `kebab-case` 命名法
 
 ## Project Setup
 
