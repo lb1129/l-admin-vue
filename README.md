@@ -66,6 +66,12 @@ Commit Message 包括 `type`、`scope`、`subject` 三部分，其中 `type`、`
 - **chore** 杂项，其他不修改源代码与测试代码的修改
 - **revert** 撤销某次提交
 
+## 命名规范
+
+- **组件** 采用 `UpperCamelCase` 命名法
+- **目录** 采用 `kebab-case` 命名法
+- **其他** 采用 `kebab-case` 命名法
+
 ## Project Setup
 
 ```sh
