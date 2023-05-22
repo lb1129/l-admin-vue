@@ -44,6 +44,28 @@ npm run format
 // INFO ...
 ```
 
+## Git Commit Message 规范
+
+Commit Message 包括 `type`、`scope`、`subject` 三部分，其中 `type`、`subject` 是必须的，而 `scope` 是可选的。
+
+```sh
+<type>(<scope>): <subject>
+```
+
+**type** 用于说明 commit 的类型，只允许使用下面几个标识：
+
+- **feat** 新功能
+- **fix** 修复 bug
+- **docs** 仅包含文档的修改
+- **style** 格式化变动，不影响代码逻辑。比如删除多余的空白，删除分号等
+- **refactor** 重构，既不是新增功能，也不是修改 bug 的代码变动
+- **perf** 性能优化
+- **test** 增加测试
+- **build** 构建工具或外部依赖包的修改，比如更新依赖包的版本等
+- **ci** 持续集成的配置文件或脚本的修改
+- **chore** 杂项，其他不修改源代码与测试代码的修改
+- **revert** 撤销某次提交
+
 ## Project Setup
 
 ```sh
