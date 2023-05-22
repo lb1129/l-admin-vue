@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import errorHandlerPlugin from '@/plugins/errorHandler'
+import errorHandlerPlugin from '@/plugins/error-handler'
 import httpPlugin from '@/plugins/http'
 import i18n from '@/i18n'
 
