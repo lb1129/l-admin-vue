@@ -6,6 +6,7 @@ import errorHandlerPlugin from '@/plugins/error-handler'
 import httpPlugin from '@/plugins/http'
 import i18n from '@/i18n'
 import pinia from '@/pinia'
+import '@/assets/global.scss'
 
 const app = createApp(App)
 
