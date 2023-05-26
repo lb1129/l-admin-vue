@@ -12,6 +12,8 @@ export default defineConfig({
     vue(),
     vueJsx(),
     Components({
+      extensions: ['vue', 'tsx'],
+      include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
       resolvers: [AntDesignVueResolver()]
     })
   ],
