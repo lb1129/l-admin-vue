@@ -8,6 +8,9 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    open: true
+  },
   plugins: [
     vue(),
     vueJsx(),
