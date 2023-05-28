@@ -7,6 +7,7 @@ import httpPlugin from '@/plugins/http'
 import i18n from '@/i18n'
 import pinia from '@/pinia'
 import '@/assets/global.scss'
+import '@/assets/transition.scss'
 
 const app = createApp(App)
 
