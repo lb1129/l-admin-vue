@@ -6,7 +6,11 @@
     <div class="authenticate-title">{{ systemName }}</div>
     <div class="authenticate-desc">{{ $t('systemDesc', [systemName]) }}</div>
     <div class="authenticate-main">
-      <RouterView />
+      <router-view v-slot="{ Component }">
+        <transition mode="out-in" name="fade">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </div>
     <div class="authenticate-footer">
       Copyright © 2023 XX CRM<a-divider type="vertical" /><router-link
