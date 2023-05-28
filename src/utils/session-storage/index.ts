@@ -17,14 +17,8 @@ export const breadcrumbListSeesion = {
     }
     return result
   },
-  set(value: string | RouteLocation[]) {
-    let valueRaw: string
-    if (typeof value === 'string') {
-      valueRaw = value
-    } else {
-      valueRaw = JSON.stringify(value)
-    }
-    sessionStorage.setItem(breadcrumbList, valueRaw)
+  set(value: RouteLocation[]) {
+    sessionStorage.setItem(breadcrumbList, JSON.stringify(value))
   },
   clear() {
     sessionStorage.removeItem(breadcrumbList)
