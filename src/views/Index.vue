@@ -180,7 +180,7 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
         cancelText: '取消',
         onOk() {
           router.replace({
-            name: 'login'
+            name: 'Login'
           })
         }
       })

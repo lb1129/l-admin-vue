@@ -21,8 +21,8 @@
     </a-form-item>
 
     <a-form-item>
-      <router-link :to="{ name: 'register', replace: true }">{{ $t('signUp') }}</router-link>
-      <router-link style="float: right" :to="{ name: 'findPassword', replace: true }">{{
+      <router-link :to="{ name: 'Register', replace: true }">{{ $t('signUp') }}</router-link>
+      <router-link style="float: right" :to="{ name: 'FindPassword', replace: true }">{{
         $t('forgotPassword')
       }}</router-link>
     </a-form-item>
@@ -48,7 +48,7 @@ const router = useRouter()
 const { t } = useI18n()
 const onFinish = async () => {
   const navigationResult = await router.replace({
-    name: 'home'
+    name: 'Home'
   })
   if (!navigationResult) {
     notification.success({

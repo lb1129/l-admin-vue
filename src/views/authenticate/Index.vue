@@ -15,7 +15,7 @@
     <div class="authenticate-footer">
       Copyright © 2023 XX CRM<a-divider type="vertical" /><router-link
         target="_blank"
-        :to="{ name: 'privacy' }"
+        :to="{ name: 'Privacy' }"
         >{{ $t('privacyPolicy') }}</router-link
       >
     </div>

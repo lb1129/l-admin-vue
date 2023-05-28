@@ -1,10 +1,10 @@
 import { type RouteRecordRaw } from 'vue-router'
-import AuthenticateIndexView from '@/views/authenticate/IndexView.vue'
-import LoginView from '@/views/authenticate/LoginView.vue'
-import RegisterView from '@/views/authenticate/RegisterView.vue'
-import FindPasswordView from '@/views/authenticate/FindPasswordView.vue'
+import Authenticate from '@/views/authenticate/Index.vue'
+import Login from '@/views/authenticate/Login.vue'
+import Register from '@/views/authenticate/Register.vue'
+import FindPassword from '@/views/authenticate/FindPassword.vue'
 import NotFound from '@/views/NotFound.vue'
-import PrivacyView from '@/views/PrivacyView.vue'
+import Privacy from '@/views/Privacy.vue'
 import Home from '@/views/Home.vue'
 import ProductList from '@/views/product-management/ProductList.vue'
 import ProductDetail from '@/views/product-management/ProductDetail.vue'
@@ -61,32 +61,32 @@ const routers: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/privacy',
-    name: 'privacy',
-    component: PrivacyView,
+    path: '/Privacy',
+    name: 'Privacy',
+    component: Privacy,
     meta: { title: '隐私政策' }
   },
   {
-    path: '/authenticate',
-    component: AuthenticateIndexView,
-    redirect: { name: 'login' },
+    path: '/Authenticate',
+    component: Authenticate,
+    redirect: { name: 'Login' },
     children: [
       {
-        path: 'login',
-        name: 'login',
-        component: LoginView,
+        path: 'Login',
+        name: 'Login',
+        component: Login,
         meta: { title: '登录' }
       },
       {
-        path: 'register',
-        name: 'register',
-        component: RegisterView,
+        path: 'Register',
+        name: 'Register',
+        component: Register,
         meta: { title: '注册' }
       },
       {
-        path: 'findPassword',
-        name: 'findPassword',
-        component: FindPasswordView,
+        path: 'FindPassword',
+        name: 'FindPassword',
+        component: FindPassword,
         meta: { title: '找回密码' }
       }
     ]

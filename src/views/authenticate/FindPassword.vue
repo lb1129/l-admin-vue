@@ -1,17 +1,12 @@
 <template>
-  <a-form :model="formState" @finish="onFinish">
-    <a-form-item name="username" :rules="[{ required: true, message: $t('pleaseEnterAccount') }]">
-      <a-input
-        size="large"
-        :placeholder="$t('account')"
-        v-model:value="formState.username"
-      ></a-input>
-    </a-form-item>
-
-    <a-form-item name="password" :rules="[{ required: true, message: $t('pleaseEnterPassword') }]">
+  <a-form class="login-form" :model="formState" @finish="onFinish">
+    <a-form-item
+      name="password"
+      :rules="[{ required: true, message: $t('pleaseEnterNewPassword') }]"
+    >
       <a-input-password
         size="large"
-        :placeholder="$t('password')"
+        :placeholder="$t('newPassword')"
         v-model:value="formState.password"
       >
       </a-input-password>
@@ -65,11 +60,11 @@
     </a-row>
 
     <a-form-item>
-      <router-link :to="{ name: 'login', replace: true }">{{ $t('haveAnAccount') }}</router-link>
+      <router-link :to="{ name: 'Login', replace: true }">{{ $t('haveAnAccount') }}</router-link>
     </a-form-item>
 
     <a-form-item>
-      <a-button size="large" block type="primary" html-type="submit">{{ $t('register') }}</a-button>
+      <a-button size="large" block type="primary" html-type="submit">{{ $t('confirm') }}</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -77,13 +72,11 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 const formState = reactive<{
-  username: string
   password: string
   confirmPassword: string
   phone: number | undefined
   code: number | undefined
 }>({
-  username: '',
   password: '',
   confirmPassword: '',
   phone: undefined,
