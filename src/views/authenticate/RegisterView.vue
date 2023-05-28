@@ -65,7 +65,7 @@
     </a-row>
 
     <a-form-item>
-      <router-link :to="{ name: 'login' }">{{ $t('haveAnAccount') }}</router-link>
+      <router-link :to="{ name: 'login', replace: true }">{{ $t('haveAnAccount') }}</router-link>
     </a-form-item>
 
     <a-form-item>

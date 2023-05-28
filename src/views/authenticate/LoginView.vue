@@ -8,7 +8,7 @@
       </a-input>
     </a-form-item>
 
-    <a-form-item name="password" :rules="[{ required: true, message: $t('pleaseEnterPassworld') }]">
+    <a-form-item name="password" :rules="[{ required: true, message: $t('pleaseEnterPassword') }]">
       <a-input-password
         size="large"
         :placeholder="$t('password')"
@@ -21,8 +21,8 @@
     </a-form-item>
 
     <a-form-item>
-      <router-link :to="{ name: 'register' }">{{ $t('signUp') }}</router-link>
-      <router-link style="float: right" :to="{ name: 'findPassword' }">{{
+      <router-link :to="{ name: 'register', replace: true }">{{ $t('signUp') }}</router-link>
+      <router-link style="float: right" :to="{ name: 'findPassword', replace: true }">{{
         $t('forgotPassword')
       }}</router-link>
     </a-form-item>
@@ -47,7 +47,7 @@ const formState = reactive({
 const router = useRouter()
 const { t } = useI18n()
 const onFinish = async () => {
-  const navigationResult = await router.push({
+  const navigationResult = await router.replace({
     name: 'home'
   })
   if (!navigationResult) {
