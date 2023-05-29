@@ -58,7 +58,7 @@ const onFinish = async () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .icon {
   color: rgb(0 0 0 / 25%);
 }

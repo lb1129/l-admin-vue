@@ -4,7 +4,7 @@
 
 <script setup lang="ts"></script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .personal-center {
   height: 100%;
   display: flex;

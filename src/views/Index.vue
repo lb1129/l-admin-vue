@@ -183,7 +183,7 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .index {
   height: 100%;
 

@@ -6,8 +6,8 @@ import errorHandlerPlugin from '@/plugins/error-handler'
 import httpPlugin from '@/plugins/http'
 import i18n from '@/i18n'
 import pinia from '@/pinia'
-import '@/assets/global.scss'
-import '@/assets/transition.scss'
+import '@/assets/global.less'
+import '@/assets/transition.less'
 
 const app = createApp(App)
 

@@ -26,7 +26,7 @@
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .authenticate {
   min-height: 100%;
   background-color: #f0f2f5;

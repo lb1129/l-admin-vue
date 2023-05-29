@@ -118,7 +118,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 :global(.tangram-suggestion-main) {
   z-index: 5;
   overflow: hidden auto;

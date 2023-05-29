@@ -17,7 +17,7 @@ const goBack = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .not-found {
   padding: 160px 0 24px;
   text-align: center;

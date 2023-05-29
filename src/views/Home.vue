@@ -239,7 +239,7 @@ const changeHandler = (data: PositionInfo) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .home {
   height: 100%;
   display: flex;
