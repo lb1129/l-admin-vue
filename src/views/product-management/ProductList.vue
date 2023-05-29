@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { type TableColumnType } from 'ant-design-vue'
-import { useAntdTableHeight } from '@/composables/antd-table-height'
+import { useResizeHeight } from '@/composables/resize-height'
 import { onMounted, onUnmounted } from 'vue'
 import pubsub from '@/utils/pubsub'
 import { productEditDone } from '@/utils/pubsub/events'
@@ -280,7 +280,7 @@ const handleResizeColumn = (w: number, col: TableColumnType<ProductRecord>) => {
   col.width = w
 }
 const wrapRef = ref<HTMLElement>()
-const { height } = useAntdTableHeight(wrapRef, 64.8 + 64 + 54.8)
+const { height } = useResizeHeight(wrapRef, 64.8 + 64 + 54.8)
 const selectedRowKeys = ref<string[]>([])
 const deleteHandle = (id?: string) => {
   const ids = id ? [id] : selectedRowKeys

@@ -1,10 +1,10 @@
 import { ref, onMounted, onUnmounted, type Ref, watchEffect, unref } from 'vue'
 
-function useAntdTableHeight(node: Ref<HTMLElement | undefined>, minusHeight: number | Ref<number>) {
+function useResizeHeight(node: Ref<HTMLElement | undefined>, minusHeight?: number | Ref<number>) {
   const height = ref(0)
   const calcTableHeight = () => {
     const el = node.value
-    if (el) height.value = el.getBoundingClientRect().height - unref(minusHeight)
+    if (el) height.value = el.getBoundingClientRect().height - unref(minusHeight ?? 0)
   }
   watchEffect(calcTableHeight)
   onMounted(() => {
@@ -16,4 +16,4 @@ function useAntdTableHeight(node: Ref<HTMLElement | undefined>, minusHeight: num
   return { height }
 }
 
-export { useAntdTableHeight }
+export { useResizeHeight }
