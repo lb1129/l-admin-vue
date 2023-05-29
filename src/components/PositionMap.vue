@@ -1,12 +1,7 @@
 <template>
   <div class="position-map" ref="wrapRef">
     <div class="position-map-content" ref="nodeRef"></div>
-    <input
-      type="text"
-      placeholder="搜索位置"
-      class="position-map-search-input ant-input"
-      ref="suggestRef"
-    />
+    <input type="text" placeholder="搜索位置" class="position-map-search-input" ref="suggestRef" />
     <div
       class="position-map-search-result"
       :style="{ maxHeight: `${height - distanceBottom}px` }"
@@ -140,6 +135,16 @@ onMounted(() => {
     left: 20px;
     z-index: 5;
     width: 30%;
+    padding: 4px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    outline: none;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: @primary-color;
+      border-right-width: 1px !important;
+    }
   }
 
   &-search-result {
