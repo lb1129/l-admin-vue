@@ -34,6 +34,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
+        // 为每个样式内容注入变量文件
+        additionalData: `@import "@/assets/style/variable.less";`,
         modifyVars: {},
         javascriptEnabled: true
       }
