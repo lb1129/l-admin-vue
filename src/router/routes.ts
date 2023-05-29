@@ -1,23 +1,17 @@
 import { type RouteRecordRaw } from 'vue-router'
-import Authenticate from '@/views/authenticate/Index.vue'
-import Login from '@/views/authenticate/Login.vue'
-import Register from '@/views/authenticate/Register.vue'
-import FindPassword from '@/views/authenticate/FindPassword.vue'
-import NotFound from '@/views/NotFound.vue'
-import Privacy from '@/views/Privacy.vue'
-import Home from '@/views/Home.vue'
-import ProductList from '@/views/product-management/ProductList.vue'
-import ProductDetail from '@/views/product-management/ProductDetail.vue'
-import ProductEdit from '@/views/product-management/ProductEdit.vue'
-import PersonalCenter from '@/views/user-management/PersonalCenter.vue'
 
 const routers: RouteRecordRaw[] = [
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('@/views/NotFound.vue') },
   {
     path: '/',
     component: () => import('../views/Index.vue'),
     children: [
-      { path: '', name: 'Home', component: Home, meta: { title: '首页' } },
+      {
+        path: '',
+        name: 'Home',
+        component: () => import('@/views/Home.vue'),
+        meta: { title: '首页' }
+      },
       {
         path: 'ProductManagement',
         name: 'ProductManagement',
@@ -27,19 +21,19 @@ const routers: RouteRecordRaw[] = [
           {
             path: 'ProductList',
             name: 'ProductList',
-            component: ProductList,
+            component: () => import('@/views/product-management/ProductList.vue'),
             meta: { title: '产品列表' }
           },
           {
             path: 'ProductDetail/:id',
             name: 'ProductDetail',
-            component: ProductDetail,
+            component: () => import('@/views/product-management/ProductDetail.vue'),
             meta: { title: '产品详情', noMenu: true }
           },
           {
             path: 'ProductEdit/:id',
             name: 'ProductEdit',
-            component: ProductEdit,
+            component: () => import('@/views/product-management/ProductEdit.vue'),
             meta: { title: '产品编辑', noMenu: true }
           }
         ]
@@ -53,7 +47,7 @@ const routers: RouteRecordRaw[] = [
           {
             path: 'PersonalCenter',
             name: 'PersonalCenter',
-            component: PersonalCenter,
+            component: () => import('@/views/user-management/PersonalCenter.vue'),
             meta: { title: '个人中心' }
           }
         ]
@@ -63,30 +57,30 @@ const routers: RouteRecordRaw[] = [
   {
     path: '/Privacy',
     name: 'Privacy',
-    component: Privacy,
+    component: () => import('@/views/Privacy.vue'),
     meta: { title: '隐私政策' }
   },
   {
     path: '/Authenticate',
-    component: Authenticate,
+    component: () => import('@/views/authenticate/Index.vue'),
     redirect: { name: 'Login' },
     children: [
       {
         path: 'Login',
         name: 'Login',
-        component: Login,
+        component: () => import('@/views/authenticate/Login.vue'),
         meta: { title: '登录' }
       },
       {
         path: 'Register',
         name: 'Register',
-        component: Register,
+        component: () => import('@/views/authenticate/Register.vue'),
         meta: { title: '注册' }
       },
       {
         path: 'FindPassword',
         name: 'FindPassword',
-        component: FindPassword,
+        component: () => import('@/views/authenticate/FindPassword.vue'),
         meta: { title: '找回密码' }
       }
     ]
