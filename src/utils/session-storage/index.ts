@@ -1,10 +1,10 @@
 import { breadcrumbList } from './keys'
-import { type RouteLocation } from 'vue-router'
+import { type Breadcrumb } from '@/pinia/stores/breadcrumb-list'
 
 // 面包屑列表
 export const breadcrumbListSeesion = {
   get() {
-    let result: RouteLocation[]
+    let result: Breadcrumb[]
     const value = sessionStorage.getItem(breadcrumbList)
     if (value) {
       try {
@@ -17,7 +17,7 @@ export const breadcrumbListSeesion = {
     }
     return result
   },
-  set(value: RouteLocation[]) {
+  set(value: Breadcrumb[]) {
     sessionStorage.setItem(breadcrumbList, JSON.stringify(value))
   },
   clear() {

@@ -18,7 +18,8 @@ router.beforeEach(async (to, from) => {
   // 首次进入 初始化面包屑列表
   if (fisrtEnter) {
     let initBreadcrumbList = breadcrumbListSeesion.get()
-    if (!initBreadcrumbList.length) initBreadcrumbList = [to]
+    if (!initBreadcrumbList.length)
+      initBreadcrumbList = [{ name: to.name as string, meta: to.meta }]
     updateBreadcrumbList(initBreadcrumbList)
     fisrtEnter = false
   } else {
@@ -27,10 +28,10 @@ router.beforeEach(async (to, from) => {
     if (toIndex < 0) {
       if (to.meta.noMenu) {
         updateRouteOperateState(RouteOperateState.forward)
-        updateBreadcrumbList([...breadcrumbList, to])
+        updateBreadcrumbList([...breadcrumbList, { name: to.name as string, meta: to.meta }])
       } else {
         updateRouteOperateState(RouteOperateState.replace)
-        updateBreadcrumbList([to])
+        updateBreadcrumbList([{ name: to.name as string, meta: to.meta }])
       }
     } else {
       updateRouteOperateState(RouteOperateState.back)
