@@ -19,7 +19,8 @@ export default defineConfig({
       include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
       resolvers: [
         AntDesignVueResolver({
-          resolveIcons: true
+          resolveIcons: true,
+          importStyle: 'less'
         })
       ]
     })
@@ -27,6 +28,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      less: {
+        modifyVars: {},
+        javascriptEnabled: true
+      }
     }
   }
 })
