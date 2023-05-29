@@ -17,7 +17,11 @@ export default defineConfig({
     Components({
       extensions: ['vue', 'tsx'],
       include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
-      resolvers: [AntDesignVueResolver()]
+      resolvers: [
+        AntDesignVueResolver({
+          resolveIcons: true
+        })
+      ]
     })
   ],
   resolve: {

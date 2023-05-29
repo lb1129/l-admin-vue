@@ -20,7 +20,6 @@ export default {
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { GlobalOutlined } from '@ant-design/icons-vue'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n()

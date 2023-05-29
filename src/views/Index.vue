@@ -116,15 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  UserOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  ShopOutlined,
-  DashboardOutlined,
-  ExclamationCircleOutlined
-} from '@ant-design/icons-vue'
-import { ref, computed, createVNode, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import vuescroll from 'vuescroll'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
@@ -174,10 +166,7 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
     case 'logout':
       Modal.confirm({
         title: '提示',
-        icon: createVNode(ExclamationCircleOutlined),
         content: '确定注销登录吗？',
-        okText: '确定',
-        cancelText: '取消',
         onOk() {
           router.replace({
             name: 'Login'

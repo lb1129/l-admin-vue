@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { notification } from 'ant-design-vue'
 import 'ant-design-vue/es/notification/style/css'
