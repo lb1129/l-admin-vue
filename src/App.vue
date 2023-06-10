@@ -20,7 +20,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <a-config-provider :locale="aLocale">
+  <a-config-provider :locale="aLocale" :input="{ autocomplete: 'off' }">
     <router-view />
   </a-config-provider>
 </template>
