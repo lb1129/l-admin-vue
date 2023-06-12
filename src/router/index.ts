@@ -1,9 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 import { tokenLocalforage } from '@/utils/localforage'
 
+const createHistory =
+  import.meta.env.VITE_NOT_SUPPORT_HISTORY === 'true' ? createWebHashHistory : createWebHistory
+
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createHistory(import.meta.env.BASE_URL),
   routes
 })
 
