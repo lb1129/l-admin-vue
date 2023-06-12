@@ -1,38 +1,63 @@
 <template>
-  <a-page-header
-    :ghost="false"
-    title="详情详情详情"
-    sub-title="This is a subtitle"
-    @back="() => $router.go(-1)"
-  >
+  <a-page-header :ghost="false" :title="t('detail')" @back="() => $router.back()">
     <template #extra>
       <a-button
         type="primary"
+        :disabled="operateAuthValueToDisabled(operateAuth.edit)"
         @click="
           () => {
-            $router.push({ name: 'ProductEdit', params: { id: '1' } })
+            $router.push({ name: 'ProductAddOrEdit', params: { id: '1' } })
           }
         "
-        >编辑</a-button
+        >{{ t('edit') }}</a-button
       >
     </template>
-    <a-descriptions size="small" :column="3">
-      <a-descriptions-item label="Created">Lili Qu</a-descriptions-item>
-      <a-descriptions-item label="Association">
-        <a-input v-model:value="val" />
-      </a-descriptions-item>
-      <a-descriptions-item label="Creation Time">2017-01-10</a-descriptions-item>
-      <a-descriptions-item label="Effective Time">2017-10-10</a-descriptions-item>
-      <a-descriptions-item label="Remarks">
-        Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
-      </a-descriptions-item>
-    </a-descriptions>
+    <a-skeleton :loading="dataLoading">
+      <a-descriptions bordered>
+        <a-descriptions-item label="name">{{ details.name }}</a-descriptions-item>
+        <a-descriptions-item label="brand">{{ details.brand }}</a-descriptions-item>
+        <a-descriptions-item label="category">{{ details.category }}</a-descriptions-item>
+        <a-descriptions-item label="price">{{ details.price }}</a-descriptions-item>
+        <a-descriptions-item label="color">{{ details.color }}</a-descriptions-item>
+        <a-descriptions-item label="inventory">{{ details.inventory }}</a-descriptions-item>
+        <a-descriptions-item label="style" :span="3">{{ details.style }}</a-descriptions-item>
+        <a-descriptions-item label="describe">{{ details.describe }}</a-descriptions-item>
+      </a-descriptions>
+    </a-skeleton>
   </a-page-header>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const val = ref()
+import { ref, onMounted, onActivated } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
+import { getProductById, type ProductType } from './server'
+
+const dataLoading = ref(false)
+const details = ref<ProductType>({
+  id: '',
+  name: '',
+  brand: '',
+  category: '',
+  price: 0,
+  color: '',
+  style: '',
+  enable: true,
+  inventory: 0,
+  describe: ''
+})
+const { operateAuth } = useAuth()
+const route = useRoute()
+const { t } = useI18n()
+
+const loadData = async () => {
+  dataLoading.value = true
+  details.value = await getProductById(route.params.id as string)
+  dataLoading.value = false
+}
+onMounted(loadData)
+onActivated(loadData)
 </script>
 
 <style scoped></style>
