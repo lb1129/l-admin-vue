@@ -3,6 +3,6 @@ import errorHandler from '@/error-handler'
 
 export default {
   install(app: App) {
-    app.config.errorHandler = errorHandler
+    if (import.meta.env.MODE === 'production') app.config.errorHandler = errorHandler
   }
 }
