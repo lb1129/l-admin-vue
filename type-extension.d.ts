@@ -9,8 +9,6 @@ declare module 'vue' {
 
 declare module 'vue-router' {
   interface RouteMeta {
-    title?: string
-    // 是否是没有菜单的路由
-    noMenu?: boolean
+    needAuth: boolean
   }
 }
