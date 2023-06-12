@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o as _,p as o}from"./index-5147a044.js";const t={},c={class:"personal-center"};function n(s,a){return _(),o("div",c,"个人中心")}const p=e(t,[["render",n],["__scopeId","data-v-5a0d4e76"]]);export{p as default};

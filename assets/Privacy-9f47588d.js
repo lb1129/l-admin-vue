@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o as r,p as c}from"./index-5147a044.js";const o={};function t(n,a){return r(),c("div",null,"隐私政策")}const f=e(o,[["render",t]]);export{f as default};
