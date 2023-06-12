@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
-    "github-pages": "run-p type-check && vite build --mode github-pages",
+    "github-pages": "vite build --mode github-pages",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
