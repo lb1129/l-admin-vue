@@ -40,21 +40,18 @@ graph TD;
     C-->D[将操作权限项应用到需控制的节点]-->E[结束]
 ```
 
-```tsx
-import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
+```vue
+<template>
+  <div>
+    <button disabled={operateAuthValueToDisabled(operateAuth.add)}>add</button>
+    <button disabled={operateAuthValueToDisabled(operateAuth.edit)}>edit</button>
+    <button disabled={operateAuthValueToDisabled(operateAuth.delete)}>delete</button>
+    <button disabled={operateAuthValueToDisabled(operateAuth.detail)}>detail</button>
+  </div>
+</temaplate>
 
-const Page: React.FC = () => {
+<script setup lang="ts">
+  import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
   const { operateAuth } = useAuth()
-
-  return (
-    <div>
-      <button disabled={operateAuthValueToDisabled(operateAuth.add)}>add</button>
-      <button disabled={operateAuthValueToDisabled(operateAuth.edit)}>edit</button>
-      <button disabled={operateAuthValueToDisabled(operateAuth.delete)}>delete</button>
-      <button disabled={operateAuthValueToDisabled(operateAuth.detail)}>detail</button>
-    </div>
-  )
-}
-
-export default Page
+</script>
 ```
