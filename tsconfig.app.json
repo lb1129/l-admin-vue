@@ -6,7 +6,9 @@
     "type-extension.d.ts",
     "components.d.ts",
     "src/**/*",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/mock/userMenuData.json",
+    "src/mock/userProductData.json"
   ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
