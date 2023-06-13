@@ -1,11 +1,11 @@
-import { breadcrumbList } from './keys'
-import { type Breadcrumb } from '@/pinia/stores/breadcrumb-list'
+import { breadcrumb } from './keys'
+import { type Breadcrumb } from '@/pinia/stores/breadcrumb'
 
-// 面包屑列表
-export const breadcrumbListSeesion = {
+// 面包屑
+export const breadcrumbSeesion = {
   get() {
     let result: Breadcrumb[]
-    const value = sessionStorage.getItem(breadcrumbList)
+    const value = sessionStorage.getItem(breadcrumb)
     if (value) {
       try {
         result = JSON.parse(value)
@@ -18,9 +18,9 @@ export const breadcrumbListSeesion = {
     return result
   },
   set(value: Breadcrumb[]) {
-    sessionStorage.setItem(breadcrumbList, JSON.stringify(value))
+    sessionStorage.setItem(breadcrumb, JSON.stringify(value))
   },
   clear() {
-    sessionStorage.removeItem(breadcrumbList)
+    sessionStorage.removeItem(breadcrumb)
   }
 }

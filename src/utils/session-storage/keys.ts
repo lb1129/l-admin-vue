@@ -1,1 +1,1 @@
-export const breadcrumbList = 'breadcrumbList'
+export const breadcrumb = 'breadcrumb'
