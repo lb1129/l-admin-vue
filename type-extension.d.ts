@@ -9,6 +9,8 @@ declare module 'vue' {
 
 declare module 'vue-router' {
   interface RouteMeta {
-    needAuth: boolean
+    needAuth?: boolean
+    hidden?: boolean
+    menuName?: string
   }
 }
