@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-c27b6911.js";import{o as t,p as n}from"./index-5147a044.js";const o={};function r(c,s){return t(),n("div",null,"MenuList")}const f=e(o,[["render",r]]);export{f as default};
