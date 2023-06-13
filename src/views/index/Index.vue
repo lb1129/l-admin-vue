@@ -33,14 +33,28 @@
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item v-for="item in []" :key="(item as string)">
-            {{ item }}
+          <a-breadcrumb-item
+            v-for="(item, index) in breadcrumbStore.breadcrumb"
+            :key="item.routeName"
+          >
+            <span v-if="index === breadcrumbStore.breadcrumb.length - 1">
+              {{ t(item.menuName) }}
+            </span>
+            <a
+              v-else
+              @click="
+                () => {
+                  router.go(index + 1 - breadcrumbStore.breadcrumb.length)
+                }
+              "
+              >{{ t(item.menuName) }}</a
+            >
           </a-breadcrumb-item>
         </a-breadcrumb>
         <a-layout-content class="index-content">
           <router-view v-slot="{ Component }">
-            <transition mode="out-in" name="fade">
-              <keep-alive :include="[]">
+            <transition mode="out-in" :name="transitionName">
+              <keep-alive :include="include">
                 <component :is="Component" />
               </keep-alive>
             </transition>
@@ -52,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -61,10 +76,26 @@ import logoSvg from '@/assets/image/logo.svg'
 import userPng from '@/assets/image/user.png'
 import IndexMenu from './IndexMenu'
 import { tokenLocalforage } from '@/utils/localforage'
+import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
+import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const { t } = useI18n()
 const router = useRouter()
+const breadcrumbStore = useBreadcrumb()
+const routeOperateStateStore = useRouteOperateState()
+
+const transitionName = computed(() => {
+  return routeOperateStateStore.routeOperateState === RouteOperateState.forward
+    ? 'slide-left'
+    : routeOperateStateStore.routeOperateState === RouteOperateState.back
+    ? 'slide-right'
+    : 'fade'
+})
+
+const include = computed(() => {
+  return breadcrumbStore.breadcrumb.map((item) => item.routeName)
+})
 
 const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
   const key = menuInfo.key as string

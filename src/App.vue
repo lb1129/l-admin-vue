@@ -5,8 +5,9 @@ import { tokenLocalforage } from '@/utils/localforage'
 import userMenuData from '@/mock/userMenuData.json'
 import { useUserInfo } from '@/pinia/stores/user-info'
 import { useMenuData, type MenuDataItemType } from '@/pinia/stores/menuData'
-import { useRouter, useRoute } from 'vue-router'
-import { lazyLoad } from '@/router/lazyLoad'
+import { useRouter, useRoute, type RouteRecordRaw } from 'vue-router'
+import { getChildrenPath } from '@/router/tools'
+import { lazyLoad } from '@/router/tools'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
@@ -55,24 +56,40 @@ onBeforeMount(() => {
 
 // 菜单数据生成动态路由
 watch(menuDataStore, () => {
-  const generateRoutes = (list: MenuDataItemType[], parentPath?: string) => {
+  const generateRoutes = (list: MenuDataItemType[]) => {
+    const res: RouteRecordRaw[] = []
     list.forEach((record) => {
-      if (record.children && record.children.length) {
-        generateRoutes(record.children, `${parentPath ?? ''}${record.path}`)
+      const children = record.children
+      if (children && children.length) {
+        const redirectChild = children.find((child) => !child.hidden)
+        let redirect
+        if (redirectChild && redirectChild.pageUrl) {
+          redirect = { name: redirectChild.pageUrl.split('/')[1] }
+        }
+        res.push({
+          name: record.name,
+          path: getChildrenPath(record.path),
+          redirect,
+          children: generateRoutes(children)
+        })
       } else if (record.pageUrl) {
         const [directory, fileName] = record.pageUrl.split('/')
-        const path = `${parentPath ?? ''}${record.path}`
-        // 在Index路由下新增动态路由
-        router.addRoute('Index', {
+        const meta: RouteRecordRaw['meta'] = { needAuth: true, menuName: record.name }
+        if (record.hidden) meta.hidden = true
+        res.push({
           name: fileName,
-          path: path.slice(1),
+          path: getChildrenPath(record.path),
           component: lazyLoad(directory, fileName),
-          meta: { needAuth: true }
+          meta
         })
       }
     })
+    return res
   }
-  generateRoutes(menuDataStore.menuData)
+  const routes = generateRoutes(menuDataStore.menuData)
+  routes.forEach((route) => {
+    router.addRoute('Index', route)
+  })
   if (menuDataStore.menuDataDone) {
     // 动态路由添加完成
     // 先删除404路由

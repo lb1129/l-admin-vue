@@ -1,24 +1,24 @@
 import { type RouteRecordRaw } from 'vue-router'
-import { lazyLoad, loading } from './lazyLoad'
+import { lazyLoad, Loading } from './tools'
 
 const routers: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'Index',
     component: lazyLoad('index', 'Index'),
-    meta: { needAuth: true },
+    meta: { needAuth: true, menuName: 'index' },
     children: [
       {
         path: '',
         name: 'Home',
         component: lazyLoad('index', 'Home'),
-        meta: { needAuth: true }
+        meta: { needAuth: true, menuName: 'homePage' }
       },
       {
         path: 'personalCenter',
         name: 'PersonalCenter',
         component: lazyLoad('personal-center', 'Index'),
-        meta: { needAuth: true }
+        meta: { needAuth: true, menuName: 'personalCenter' }
       }
     ]
   },
@@ -48,8 +48,8 @@ const routers: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    // 初始为loading
-    component: loading
+    // 初始为Loading
+    component: Loading
   }
 ]
 
