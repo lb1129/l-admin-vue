@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onActivated, watch, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import type { TableColumnType, TableProps } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -203,19 +203,17 @@ const tablePaginationConfig = computed(() => ({
   showQuickJumper: true
 }))
 
-const loadData = async () => {
-  dataLoading.value = true
-  const result = await getProducts(queryParams)
-  dataSource.value = result.data
-  total.value = result.total
-  dataLoading.value = false
-}
-onMounted(() => {
-  watch(queryParams, loadData, { immediate: true })
-})
-onActivated(() => {
-  watch(queryParams, loadData, { immediate: true })
-})
+watch(
+  queryParams,
+  async () => {
+    dataLoading.value = true
+    const result = await getProducts(queryParams)
+    dataSource.value = result.data
+    total.value = result.total
+    dataLoading.value = false
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="less"></style>

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onActivated } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
@@ -51,13 +51,17 @@ const { operateAuth } = useAuth()
 const route = useRoute()
 const { t } = useI18n()
 
-const loadData = async () => {
-  dataLoading.value = true
-  details.value = await getProductById(route.params.id as string)
-  dataLoading.value = false
-}
-onMounted(loadData)
-onActivated(loadData)
+watch(
+  route,
+  async (value, oldValue) => {
+    if (!oldValue || value.params.id !== oldValue.params.id) {
+      dataLoading.value = true
+      details.value = await getProductById(value.params.id as string)
+      dataLoading.value = false
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped></style>

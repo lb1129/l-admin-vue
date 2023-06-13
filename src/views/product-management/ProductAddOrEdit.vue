@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onActivated } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { type FormInstance, message } from 'ant-design-vue'
@@ -108,15 +108,19 @@ const saveHandler = async () => {
     router.back()
   }
 }
-const loadData = async () => {
-  if (route.params.id) {
-    dataLoading.value = true
-    details.value = await getProductById(route.params.id as string)
-    dataLoading.value = false
-  }
-}
-onMounted(loadData)
-onActivated(loadData)
+watch(
+  route,
+  async (value, oldValue) => {
+    if (!oldValue || value.params.id !== oldValue.params.id) {
+      if (value.params.id) {
+        dataLoading.value = true
+        details.value = await getProductById(value.params.id as string)
+        dataLoading.value = false
+      }
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped></style>
