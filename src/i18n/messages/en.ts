@@ -44,6 +44,7 @@ export default {
   productManagement: 'Product management',
   productList: 'Product list',
   productDetail: 'Product detail',
+  productAddOrEdit: 'Product add or edit',
   add: 'Add',
   delete: 'Delete',
   edit: 'Edit',

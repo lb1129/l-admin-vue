@@ -44,6 +44,7 @@ export default {
   productManagement: '产品管理',
   productList: '产品列表',
   productDetail: '产品详情',
+  productAddOrEdit: '产品新增或编辑',
   add: '新增',
   delete: '删除',
   edit: '编辑',
