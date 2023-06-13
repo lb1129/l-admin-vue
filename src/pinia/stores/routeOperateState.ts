@@ -9,8 +9,8 @@ export enum RouteOperateState {
 
 export const useRouteOperateState = defineStore('routeOperateState', () => {
   const routeOperateState = ref<RouteOperateState>()
-  function updateRouteOperateState(state: RouteOperateState) {
+  function setRouteOperateState(state: RouteOperateState) {
     routeOperateState.value = state
   }
-  return { routeOperateState, updateRouteOperateState }
+  return { routeOperateState, setRouteOperateState }
 })
