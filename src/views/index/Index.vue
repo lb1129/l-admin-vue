@@ -12,7 +12,7 @@
         <a-dropdown>
           <span class="index-header-right-item index-header-right-item_user">
             <a-avatar size="small" :src="userPng" />
-            <span style="margin-left: 8px">viho</span>
+            <span style="margin-left: 8px">{{ userInfoStore.userInfo.userName }}</span>
           </span>
           <template #overlay>
             <a-menu @click="topRightMenuItemClickHandle">
@@ -78,12 +78,14 @@ import IndexMenu from './IndexMenu'
 import { tokenLocalforage } from '@/utils/localforage'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
+import { useUserInfo } from '@/pinia/stores/userInfo'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const { t } = useI18n()
 const router = useRouter()
 const breadcrumbStore = useBreadcrumb()
 const routeOperateStateStore = useRouteOperateState()
+const userInfoStore = useUserInfo()
 
 const transitionName = computed(() => {
   return routeOperateStateStore.routeOperateState === RouteOperateState.forward
