@@ -47,7 +47,7 @@
     {
       "name": "productManagement",
       "path": "/productManagement",
-      "icon": "",
+      "icon": "ShopOutlined",
       "children": [
         {
           "name": "productList",
