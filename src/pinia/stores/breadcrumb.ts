@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { breadcrumbSeesion } from '@/utils/session-storage'
+import { breadcrumbSeesion } from '@/storage/session-storage'
 
 export interface Breadcrumb {
   routeName: string

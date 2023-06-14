@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import { tokenLocalforage } from '@/utils/localforage'
+import { tokenLocalforage } from '@/storage/localforage'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
-import { breadcrumbSeesion } from '@/utils/session-storage'
+import { breadcrumbSeesion } from '@/storage/session-storage'
 
 const createHistory =
   import.meta.env.VITE_NOT_SUPPORT_HISTORY === 'true' ? createWebHashHistory : createWebHistory

@@ -42,4 +42,6 @@ class Pubsub {
   }
 }
 
-export default new Pubsub()
+// NOTE 建议改成单例导出 整个系统用一个实例
+// NOTE 如果要分模块使用 在模块文件内引入pubsub 然后再new实例导出 然后该模块公用这一实例
+export default Pubsub

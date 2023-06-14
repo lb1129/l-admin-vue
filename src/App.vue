@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { watch, watchEffect, ref, onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { tokenLocalforage } from '@/utils/localforage'
+import { tokenLocalforage } from '@/storage/localforage'
 import userMenuData from '@/mock/userMenuData.json'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useMenuData, type MenuDataItemType } from '@/pinia/stores/menuData'

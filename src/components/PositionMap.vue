@@ -24,7 +24,7 @@ export interface PositionInfo {
 
 <script setup lang="ts">
 import { ref, onMounted, watchEffect } from 'vue'
-import { useResizeHeight } from '@/composables/resize-height'
+import { useResizeHeight } from '@/utils/useResize'
 const emit = defineEmits<{
   (e: 'change', positionInfo: PositionInfo): void
 }>()

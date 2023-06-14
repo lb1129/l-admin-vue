@@ -90,7 +90,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import type { TableColumnType, TableProps } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useResizeHeight } from '@/composables/resize-height'
+import { useResizeHeight } from '@/utils/useResize'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
 import { getProducts, type ProductType, type ProductsQueryParamsType } from './server'
 
