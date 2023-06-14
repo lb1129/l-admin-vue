@@ -5,15 +5,17 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 
-export default defineComponent({
-  setup() {
+export default defineComponent<{
+  collapsed: boolean
+}>({
+  setup(props) {
     const menuDataStore = useMenuData()
     const breadcrumbStore = useBreadcrumb()
     const { t } = useI18n()
     const route = useRoute()
     const router = useRouter()
 
-    const generateMenuItems = (list: MenuDataItemType[], parent?: MenuDataItemType) => {
+    const generateMenuItems = (list: MenuDataItemType[]) => {
       const result: VNode[] = []
       list.forEach((menu) => {
         const children = menu.children
@@ -21,7 +23,7 @@ export default defineComponent({
           result.push(
             <a-sub-menu key={menu.name}>
               {{
-                default: () => generateMenuItems(children, menu),
+                default: () => generateMenuItems(children),
                 title: () => (
                   <span>
                     <span>{t(menu.name)}</span>
@@ -59,15 +61,17 @@ export default defineComponent({
     const openKeys = ref<string[]>([])
     // 路由与菜单openKeys联动
     watchEffect(() => {
-      const keys: string[] = []
-      const matched = route.matched
-      for (let i = matched.length - 2; i > 0; i--) {
-        const record = matched[i]
-        if (record.children.some((child) => child.name === route.name)) {
-          keys.push(record.name as string)
+      if (!props.collapsed) {
+        const keys: string[] = []
+        const matched = route.matched
+        for (let i = matched.length - 2; i > 0; i--) {
+          const record = matched[i]
+          if (record.children.some((child) => child.name === route.name)) {
+            keys.push(record.name as string)
+          }
         }
+        openKeys.value = keys
       }
-      openKeys.value = keys
     })
     // 菜单节点
     const menuNodes = computed(() => generateMenuItems(menuDataStore.menuData))
