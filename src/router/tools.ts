@@ -1,7 +1,5 @@
 import { defineComponent, ref, h, markRaw, type VNode } from 'vue'
-import PageLoading from '@/components/PageLoading.vue'
-
-export const Loading = PageLoading
+import PageLoading from '@/components/PageLoading/index.vue'
 
 export const lazyLoad = (directory: string, fileName: string) =>
   defineComponent({

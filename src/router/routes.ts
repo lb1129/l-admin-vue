@@ -1,5 +1,6 @@
 import { type RouteRecordRaw } from 'vue-router'
-import { lazyLoad, Loading } from './tools'
+import { lazyLoad } from './tools'
+import PageLoading from '@/components/PageLoading/index.vue'
 
 const routers: RouteRecordRaw[] = [
   {
@@ -49,7 +50,7 @@ const routers: RouteRecordRaw[] = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     // 初始为Loading
-    component: Loading
+    component: PageLoading
   }
 ]
 
