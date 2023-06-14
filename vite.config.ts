@@ -1,48 +1,13 @@
-import { fileURLToPath, URL } from 'node:url'
+import { mergeConfig, defineConfig, loadEnv } from 'vite'
+import viteBaseConfig from './vite.config.base'
 
-import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import Components from 'unplugin-vue-components/vite'
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
-
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  return {
-    base: env.VITE_PUBLIC_URL,
-    server: {
-      open: true
-    },
-    plugins: [
-      vue(),
-      vueJsx(),
-      Components({
-        extensions: ['vue', 'tsx'],
-        include: [/\.vue$/, /\.vue\?vue/, /\.tsx$/],
-        resolvers: [
-          AntDesignVueResolver({
-            resolveIcons: true,
-            importStyle: 'less'
-          })
-        ]
-      })
-    ],
-    resolve: {
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-        '~': fileURLToPath(new URL('./node_modules', import.meta.url))
-      }
-    },
-    css: {
-      preprocessorOptions: {
-        less: {
-          // 为每个样式内容注入变量文件
-          additionalData: `@import "@/assets/style/variable.less";`,
-          modifyVars: {},
-          javascriptEnabled: true
-        }
-      }
+export default mergeConfig(
+  viteBaseConfig,
+  // https://vitejs.dev/config/
+  defineConfig(({ mode }) => {
+    const env = loadEnv(mode, process.cwd(), '')
+    return {
+      base: env.VITE_PUBLIC_URL
     }
-  }
-})
+  })
+)

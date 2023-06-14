@@ -1,10 +1,10 @@
 import { fileURLToPath } from 'node:url'
 import { mergeConfig } from 'vite'
 import { configDefaults, defineConfig } from 'vitest/config'
-import viteConfig from './vite.config'
+import viteConfigBase from './vite.config.base'
 
 export default mergeConfig(
-  viteConfig,
+  viteConfigBase,
   defineConfig({
     test: {
       environment: 'jsdom',
