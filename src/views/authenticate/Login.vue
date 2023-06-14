@@ -50,7 +50,7 @@ import Layout from './Layout.vue'
 import { useI18n } from 'vue-i18n'
 import userMenuData from '@/mock/userMenuData.json'
 import { tokenLocalforage } from '@/utils/localforage'
-import { useUserInfo } from '@/pinia/stores/user-info'
+import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useMenuData } from '@/pinia/stores/menuData'
 const formState = reactive({
   userName: '',
