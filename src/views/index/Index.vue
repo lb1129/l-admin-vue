@@ -26,9 +26,16 @@
       </div>
     </a-layout-header>
     <a-layout>
-      <a-layout-sider breakpoint="md" collapsible :collapsedWidth="48" :width="208" theme="light">
+      <a-layout-sider
+        breakpoint="md"
+        collapsible
+        v-model:collapsed="collapsed"
+        :collapsedWidth="48"
+        :width="208"
+        theme="light"
+      >
         <div class="index-slider-content">
-          <IndexMenu />
+          <IndexMenu :collapsed="collapsed" />
         </div>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
@@ -66,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -81,6 +88,7 @@ import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOpe
 import { useUserInfo } from '@/pinia/stores/userInfo'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
+const collapsed = ref(false)
 const { t } = useI18n()
 const router = useRouter()
 const breadcrumbStore = useBreadcrumb()
