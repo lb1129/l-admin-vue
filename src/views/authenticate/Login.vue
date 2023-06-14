@@ -2,7 +2,11 @@
   <Layout>
     <a-form :model="formState" @finish="onFinish">
       <a-form-item name="userName" :rules="[{ required: true, message: $t('pleaseEnterAccount') }]">
-        <a-input size="large" :placeholder="$t('account')" v-model:value="formState.userName">
+        <a-input
+          size="large"
+          :placeholder="$t('account') + 'admin/viho/user'"
+          v-model:value="formState.userName"
+        >
           <template #prefix>
             <UserOutlined class="icon" />
           </template>
@@ -15,7 +19,7 @@
       >
         <a-input-password
           size="large"
-          :placeholder="$t('password')"
+          :placeholder="$t('password') + 'a123456'"
           v-model:value="formState.password"
         >
           <template #prefix>
