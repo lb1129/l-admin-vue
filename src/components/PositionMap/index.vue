@@ -1,7 +1,12 @@
 <template>
   <div class="position-map" ref="wrapRef">
     <div class="position-map-content" ref="nodeRef"></div>
-    <input type="text" placeholder="搜索位置" class="position-map-search-input" ref="suggestRef" />
+    <input
+      type="text"
+      :placeholder="$t('searchLocation')"
+      class="position-map-search-input"
+      ref="suggestRef"
+    />
     <div
       class="position-map-search-result"
       :style="{ maxHeight: `${height - distanceBottom}px` }"
