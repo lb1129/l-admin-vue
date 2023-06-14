@@ -1,1 +1,0 @@
-import{f as s,v as a,x as r,aU as u,u as c}from"./index-a30daa8d.js";function d(i,o){const t=s(0),e=()=>{const n=i.value;n&&(t.value=n.getBoundingClientRect().height-c(o??0))};return a(e),r(()=>{window.addEventListener("resize",e)}),u(()=>{window.removeEventListener("resize",e)}),{height:t}}export{d as u};
