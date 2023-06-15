@@ -90,7 +90,7 @@ import { ref, reactive, computed, watch } from 'vue'
 import type { TableColumnType, TableProps } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useResizeHeight } from '@/utils/useResize'
+import { useResize } from '@/utils/useResize'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
 import { getProducts, type ProductType, type ProductsQueryParamsType } from './server'
 
@@ -175,7 +175,7 @@ const queryParams = reactive<ProductsQueryParamsType>({
 const router = useRouter()
 const { t } = useI18n()
 const { operateAuth } = useAuth()
-const { height } = useResizeHeight(wrapRef, 64.8 + 64 + 54.8)
+const { height } = useResize(wrapRef, { minusHeight: 64.8 + 64 + 54.8 })
 
 const addOrEditHandle = (id?: string) => {
   router.push({

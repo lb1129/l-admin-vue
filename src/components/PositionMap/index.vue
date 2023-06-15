@@ -29,7 +29,7 @@ export interface PositionInfo {
 
 <script setup lang="ts">
 import { ref, onMounted, watchEffect } from 'vue'
-import { useResizeHeight } from '@/utils/useResize'
+import { useResize } from '@/utils/useResize'
 const emit = defineEmits<{
   (e: 'change', positionInfo: PositionInfo): void
 }>()
@@ -38,7 +38,7 @@ const nodeRef = ref<HTMLElement>()
 const suggestRef = ref<HTMLElement>()
 const resultRef = ref<HTMLElement>()
 const suggestionRef = ref<HTMLElement | null>()
-const { height } = useResizeHeight(wrapRef)
+const { height } = useResize(wrapRef)
 const distanceBottom = 200
 watchEffect(() => {
   if (suggestionRef.value) {
