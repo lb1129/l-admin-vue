@@ -54,5 +54,6 @@ export default {
   pageFileLoadingFailed: 'Page file loading failed',
   whatSuccess: '{0} success',
   whatTotal: 'Total {0} items',
-  queryByName: 'Query by Name'
+  queryByName: 'Query by Name',
+  areYouSureDelete: 'Are you sure delete?'
 }

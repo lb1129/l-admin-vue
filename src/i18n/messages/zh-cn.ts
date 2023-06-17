@@ -54,5 +54,6 @@ export default {
   pageFileLoadingFailed: '页面文件加载失败',
   whatSuccess: '{0}成功',
   whatTotal: '共 {0} 条',
-  queryByName: '按名称查询'
+  queryByName: '按名称查询',
+  areYouSureDelete: '确定删除吗？'
 }
