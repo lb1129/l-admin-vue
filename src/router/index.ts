@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import { tokenLocalforage } from '@/storage/localforage'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
+import { useMenuData } from '@/pinia/stores/menuData'
+import { useUserInfo } from '@/pinia/stores/userInfo'
 import { breadcrumbSeesion } from '@/storage/session-storage'
+import { isLogin, getUserInfo, getMenu } from '@/views/authenticate/server'
 
 const createHistory =
   import.meta.env.VITE_NOT_SUPPORT_HISTORY === 'true' ? createWebHashHistory : createWebHistory
@@ -48,12 +50,26 @@ let isFisrtEnter1 = true
 router.beforeEach(async (to, from) => {
   if (isFisrtEnter1) {
     isFisrtEnter1 = false
-    // mock 是否已登录校验流程
-    const token = await tokenLocalforage.get()
-    if (token) {
+    try {
+      await isLogin()
+      const { setMenuData, setMenuDataDone } = useMenuData()
+      const { setUserInfo } = useUserInfo()
+      try {
+        const userInfoRes = await getUserInfo()
+        const menuRes = await getMenu()
+        // 更新pinia内的菜单数据
+        setMenuData(menuRes.data)
+        // 将pinia内菜单数据获取状态设置为完成
+        setMenuDataDone(true)
+        // 更新pinia内的用户信息
+        setUserInfo(userInfoRes.data)
+      } catch (error) {
+        // 将pinia内菜单数据获取状态设置为完成
+        setMenuDataDone(true)
+      }
       if (to.meta.needAuth === false) return { name: 'Home' }
-    } else {
-      if (to.meta.needAuth == true) return { name: 'Login' }
+    } catch (error) {
+      if (to.meta.needAuth == true || to.name === 'NotFound') return { name: 'Login' }
     }
   }
 })

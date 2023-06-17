@@ -53,9 +53,12 @@ export default defineComponent({
     }
     // 菜单点击处理
     const clickHandle = (menuInfo: MenuInfo) => {
+      // 回退面包屑
       if (breadcrumbStore.breadcrumb.length > 1) {
         router.go(1 - breadcrumbStore.breadcrumb.length)
       }
+      // NOTE 路由同步操作 上一个操作会被取消掉 暂未找到api可以让操作都执行
+      // NOTE 等路由地址回退完成后 再push路由
       setTimeout(() => {
         router.push({
           name: menuInfo.key as string

@@ -70,17 +70,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { type FormInstance, message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
 import { getProductById, saveProduct, type ProductType } from './server'
+import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
 
 const dataLoading = ref(false)
 const submitLoading = ref(false)
 const details = ref<ProductType>({
-  id: '',
   name: '',
   brand: '',
   category: '',
@@ -96,31 +96,39 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const title = computed(() => (route.params.id ? t('edit') : t('add')))
+const { setProductAddOrEditDone } = useProductAddOrEditDone()
 
 const saveHandler = async () => {
   if (formRef.value) {
-    const values = await formRef.value.validateFields()
-    // mock 保存流程
+    await formRef.value.validateFields()
     submitLoading.value = true
-    await saveProduct(values as ProductType)
-    submitLoading.value = false
-    message.success(t('whatSuccess', [t('save')]))
-    router.back()
+    try {
+      await saveProduct(details.value)
+      submitLoading.value = false
+      // 产品新增或编辑完成状态设为true
+      setProductAddOrEditDone(true)
+      message.success(t('whatSuccess', [t('save')]))
+      router.back()
+    } catch (error) {
+      submitLoading.value = false
+    }
   }
 }
-watch(
-  route,
-  async (value, oldValue) => {
-    if (!oldValue || value.params.id !== oldValue.params.id) {
-      if (value.params.id) {
-        dataLoading.value = true
-        details.value = await getProductById(value.params.id as string)
-        dataLoading.value = false
-      }
+
+onMounted(async () => {
+  // 产品新增或编辑完成状态设为false
+  setProductAddOrEditDone(false)
+  if (route.params.id) {
+    dataLoading.value = true
+    try {
+      const res = await getProductById(route.params.id as string)
+      details.value = res.data
+      dataLoading.value = false
+    } catch (error) {
+      dataLoading.value = false
     }
-  },
-  { immediate: true }
-)
+  }
+})
 </script>
 
 <style scoped></style>

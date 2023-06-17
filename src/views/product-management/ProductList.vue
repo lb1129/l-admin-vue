@@ -29,12 +29,15 @@
             :disabled="operateAuthValueToDisabled(operateAuth.add)"
             >{{ t('add') }}</a-button
           >
-          <a-button
-            type="primary"
-            @click="deleteHandle()"
+          <a-popconfirm
             :disabled="operateAuthValueToDisabled(operateAuth.delete)"
-            >{{ t('delete') }}</a-button
+            :title="$t('areYouSureDelete')"
+            @confirm="deleteHandle()"
           >
+            <a-button type="primary" :disabled="operateAuthValueToDisabled(operateAuth.delete)">{{
+              t('delete')
+            }}</a-button>
+          </a-popconfirm>
         </a-button-group>
         <div style="float: right">
           <a-input-search
@@ -73,12 +76,15 @@
             >{{ t('edit') }}</a-button
           >
           <a-divider type="vertical" />
-          <a-button
-            type="link"
-            @click="deleteHandle(record.id)"
+          <a-popconfirm
             :disabled="operateAuthValueToDisabled(operateAuth.delete)"
-            >{{ t('delete') }}</a-button
+            :title="$t('areYouSureDelete')"
+            @confirm="deleteHandle(record.id)"
           >
+            <a-button type="link" :disabled="operateAuthValueToDisabled(operateAuth.delete)">{{
+              t('delete')
+            }}</a-button>
+          </a-popconfirm>
         </template>
       </template>
     </a-table>
@@ -88,11 +94,20 @@
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
 import type { TableColumnType, TableProps } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
+import 'ant-design-vue/es/message/style'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useResize } from '@/utils/useResize'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
-import { getProducts, type ProductType, type ProductsQueryParamsType } from './server'
+import {
+  getProducts,
+  deleteProductByIds,
+  type ProductType,
+  type ProductsQueryParamsType
+} from './server'
+import { storeToRefs } from 'pinia'
+import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
 
 const wrapRef = ref<HTMLElement>()
 const dataLoading = ref(false)
@@ -176,6 +191,7 @@ const router = useRouter()
 const { t } = useI18n()
 const { operateAuth } = useAuth()
 const { height } = useResize(wrapRef, { minusHeight: 64.8 + 64 + 54.8 })
+const { productAddOrEditDone } = storeToRefs(useProductAddOrEditDone())
 
 const addOrEditHandle = (id?: string) => {
   router.push({
@@ -185,8 +201,16 @@ const addOrEditHandle = (id?: string) => {
     }
   })
 }
-const deleteHandle = (id?: string) => {
-  const ids = id ? [id] : selectedRowKeys
+const deleteHandle = async (id?: string) => {
+  const ids = id ? [id] : selectedRowKeys.value
+  dataLoading.value = true
+  try {
+    await deleteProductByIds(ids)
+    message.success(t('whatSuccess', [t('delete')]))
+    loadData()
+  } catch (error) {
+    dataLoading.value = false
+  }
 }
 const changeHandle: TableProps<ProductType>['onChange'] = (pagination, filters, sorter) => {
   queryParams.pagination.pageNo = pagination.current as number
@@ -203,17 +227,24 @@ const tablePaginationConfig = computed(() => ({
   showQuickJumper: true
 }))
 
-watch(
-  queryParams,
-  async () => {
-    dataLoading.value = true
-    const result = await getProducts(queryParams)
-    dataSource.value = result.data
-    total.value = result.total
+const loadData = async () => {
+  dataLoading.value = true
+  try {
+    const res = await getProducts(queryParams)
+    dataSource.value = res.data.data
+    total.value = res.data.total
     dataLoading.value = false
-  },
-  { immediate: true }
-)
+  } catch (error) {
+    dataLoading.value = false
+  }
+}
+
+watch(queryParams, loadData, { immediate: true })
+
+// 监听产品新增或编辑完成状态 为true 刷新数据
+watch(productAddOrEditDone, (value) => {
+  if (value) loadData()
+})
 </script>
 
 <style scoped lang="less"></style>

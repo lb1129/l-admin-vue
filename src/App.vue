@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { watch, watchEffect, ref, onBeforeMount } from 'vue'
+import { watch, watchEffect, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { tokenLocalforage } from '@/storage/localforage'
-import userMenuData from '@/mock/userMenuData.json'
-import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useMenuData, type MenuDataItemType } from '@/pinia/stores/menuData'
-import { useRouter, useRoute, type RouteRecordRaw } from 'vue-router'
+import { useRouter, type RouteRecordRaw } from 'vue-router'
 import { getChildrenPath } from '@/router/tools'
 import { lazyLoad } from '@/router/tools'
 import enUS from 'ant-design-vue/es/locale/en_US'
@@ -16,10 +13,9 @@ import 'dayjs/locale/zh-cn'
 
 const { locale } = useI18n()
 const aLocale = ref<typeof enUS>()
-const userInfoStore = useUserInfo()
+
 const menuDataStore = useMenuData()
 const router = useRouter()
-const route = useRoute()
 
 watchEffect(() => {
   if (locale.value === 'en') {
@@ -29,29 +25,6 @@ watchEffect(() => {
     aLocale.value = zhCN
     dayjs.locale('zh-cn')
   }
-})
-
-// mock 已登录刷新流程
-onBeforeMount(() => {
-  tokenLocalforage.get().then((token) => {
-    if (token) {
-      setTimeout(() => {
-        // 获取用户菜单
-        const menuData = userMenuData[token as keyof typeof userMenuData]
-        if (menuData) {
-          // 更新pinia内的菜单数据
-          menuDataStore.setMenuData(menuData)
-          // 将pinia内菜单数据获取状态设置为完成
-          menuDataStore.setMenuDataDone(true)
-          // 更新pinia内的用户信息
-          userInfoStore.setUserInfo({ userName: token })
-        }
-      }, 500)
-    } else {
-      // 将redux内菜单数据获取状态设置为完成
-      menuDataStore.setMenuDataDone(true)
-    }
-  })
 })
 
 // 菜单数据生成动态路由
@@ -100,8 +73,11 @@ watch(menuDataStore, () => {
       name: 'NotFound',
       component: lazyLoad('mixed', 'NotFound')
     })
-    // 触发重新匹配
-    router.replace(route.fullPath)
+    // NOTE 路由同步操作 上一个操作会被取消掉 暂未找到api可以让操作都执行
+    // NOTE 等上一个路由地址更新完成 再触发重新匹配
+    setTimeout(() => {
+      router.replace(location.pathname)
+    }, 10)
   }
 })
 </script>

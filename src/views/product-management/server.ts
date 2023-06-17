@@ -1,6 +1,4 @@
-import userProductData from '@/mock/userProductData.json'
-
-const productMockData: ProductType[] = userProductData
+import http, { type IResponse } from '@/http'
 
 export interface ProductType {
   id?: string
@@ -31,48 +29,26 @@ export interface ProductsQueryParamsType {
 }
 
 export const getProductById = (id: string) =>
-  new Promise<ProductType>((resolve, reject) => {
-    setTimeout(() => {
-      const product = productMockData.find((product) => product.id === id)
-      if (product) resolve(product)
-    }, 500)
+  http.get<IResponse<ProductType>>(`/api/product`, {
+    params: {
+      id
+    }
   })
 
 export const saveProduct = (product: ProductType) =>
-  new Promise<string>((resolve, reject) => {
-    setTimeout(() => {
-      const { id } = product
-      if (id) {
-        const index = productMockData.findIndex((record) => record.id === id)
-        productMockData.splice(index, 1, product)
-        resolve(id)
-      } else {
-        const newId = `${productMockData.length - 1}`
-        productMockData.push({ ...product, id: newId })
-        resolve(newId)
-      }
-    }, 500)
+  http.post<IResponse<string>>('/api/product', product)
+
+export const deleteProductByIds = (ids: string[]) =>
+  http.delete<IResponse<null>>('/api/product', {
+    data: ids
   })
 
 export const getProducts = (params: ProductsQueryParamsType) =>
-  new Promise<ProductPaginationType>((resolve, reject) => {
-    setTimeout(() => {
-      const { keyword, pagination } = params
-      let data: ProductType[] = productMockData
-      let total = data.length
-      if (keyword) {
-        data = productMockData.filter((product) => {
-          return product.name.indexOf(keyword) !== -1
-        })
-        total = data.length
-      }
-      const { pageNo, pageSize } = pagination
-      data = data.slice((pageNo - 1) * pageSize, pageNo * pageSize - 1)
-      resolve({
-        pageNo,
-        pageSize,
-        total,
-        data
-      })
-    }, 500)
-  })
+  http.post<
+    IResponse<{
+      pageNo: number
+      pageSize: number
+      total: number
+      data: ProductType[]
+    }>
+  >('/api/getProducts', params)

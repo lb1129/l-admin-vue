@@ -6,7 +6,7 @@
         :disabled="operateAuthValueToDisabled(operateAuth.edit)"
         @click="
           () => {
-            $router.push({ name: 'ProductAddOrEdit', params: { id: '1' } })
+            $router.push({ name: 'ProductAddOrEdit', params: { id: details.id } })
           }
         "
         >{{ t('edit') }}</a-button
@@ -28,15 +28,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
 import { getProductById, type ProductType } from './server'
+import { storeToRefs } from 'pinia'
+import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
 
 const dataLoading = ref(false)
 const details = ref<ProductType>({
-  id: '',
   name: '',
   brand: '',
   category: '',
@@ -50,18 +51,29 @@ const details = ref<ProductType>({
 const { operateAuth } = useAuth()
 const route = useRoute()
 const { t } = useI18n()
+const { productAddOrEditDone } = storeToRefs(useProductAddOrEditDone())
 
-watch(
-  route,
-  async (value, oldValue) => {
-    if (!oldValue || value.params.id !== oldValue.params.id) {
-      dataLoading.value = true
-      details.value = await getProductById(value.params.id as string)
+const loadData = async () => {
+  if (route.params.id) {
+    dataLoading.value = true
+    try {
+      const res = await getProductById(route.params.id as string)
+      details.value = res.data
+      dataLoading.value = false
+    } catch (error) {
       dataLoading.value = false
     }
-  },
-  { immediate: true }
-)
+  }
+}
+
+onMounted(() => {
+  loadData()
+})
+
+// 监听产品新增或编辑完成状态 为true 刷新数据
+watch(productAddOrEditDone, (value) => {
+  if (value) loadData()
+})
 </script>
 
 <style scoped></style>

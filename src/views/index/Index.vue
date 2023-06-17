@@ -77,8 +77,9 @@ import { computed, ref } from 'vue'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Modal } from 'ant-design-vue'
+import { Modal, message } from 'ant-design-vue'
 import 'ant-design-vue/es/modal/style'
+import 'ant-design-vue/es/message/style'
 import logoSvg from '@/assets/image/logo.svg'
 import userPng from '@/assets/image/user.png'
 import IndexMenu from './IndexMenu'
@@ -86,6 +87,7 @@ import { tokenLocalforage } from '@/storage/localforage'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
 import { useUserInfo } from '@/pinia/stores/userInfo'
+import { logout } from '@/views/authenticate/server'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const collapsed = ref(false)
@@ -115,10 +117,17 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
         title: t('tip'),
         content: t('areYouSureToLogOut'),
         onOk: async function () {
-          await tokenLocalforage.clear()
-          router.replace({
-            name: 'Login'
-          })
+          message.loading(t('signingOutPleaseWait'), 0)
+          try {
+            await logout()
+            await tokenLocalforage.clear()
+            message.destroy()
+            router.replace({
+              name: 'Login'
+            })
+          } catch (error) {
+            message.destroy()
+          }
         }
       })
       break
