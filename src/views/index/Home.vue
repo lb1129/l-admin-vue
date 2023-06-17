@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { type PositionInfo } from '@/components/PositionMap.vue'
+import { type PositionInfo } from '@/components/PositionMap/index.vue'
 import * as echarts from 'echarts/core'
 import { GridComponent, TooltipComponent } from 'echarts/components'
 import { BarChart } from 'echarts/charts'
