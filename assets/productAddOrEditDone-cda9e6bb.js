@@ -1,1 +1,0 @@
-import{bi as d,bj as e,f as r}from"./index-419ab6bd.js";const c=t=>d.get("/api/product",{params:{id:t}}),u=t=>d.post("/api/product",t),n=t=>d.delete("/api/product",{data:t}),p=t=>d.post("/api/getProducts",t),i=e("productAddOrEditDone",()=>{const t=r(!1);function o(s){t.value=s}return{productAddOrEditDone:t,setProductAddOrEditDone:o}});export{p as a,n as d,c as g,u as s,i as u};
