@@ -1,1 +1,0 @@
-import{i as a}from"./ResizeObserver.es-0f9f8adb.js";import{f as u,x as f,u as n}from"./index-fc85a378.js";const v=(h,e)=>{const s=u(0),c=u(0);return f(o=>{const t=n(h);if(t){const r=new a(i=>{s.value=i[0].contentRect.width-(e?n(e.minusWidth??0):0),c.value=i[0].contentRect.height-(e?n(e.minusHeight??0):0)});r.observe(t),o(()=>r.unobserve(t))}}),{width:s,height:c}};export{v as u};
