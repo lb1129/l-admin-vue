@@ -5,6 +5,8 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import mockServer from 'vite-plugin-mock-server'
+import bodyParser from 'body-parser'
 
 export default defineConfig({
   server: {
@@ -21,6 +23,14 @@ export default defineConfig({
           resolveIcons: true,
           importStyle: 'less'
         })
+      ]
+    }),
+    mockServer({
+      middlewares: [
+        bodyParser.json(),
+        bodyParser.urlencoded({ extended: false }),
+        bodyParser.text(),
+        bodyParser.raw()
       ]
     })
   ],
