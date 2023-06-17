@@ -2,12 +2,12 @@ import { ref } from 'vue'
 import { type AxiosRequestConfig } from 'axios'
 import http from '@/http'
 
-function useHttp(config: AxiosRequestConfig) {
-  const data = ref(null)
-  const error = ref(null)
-  http(config)
+function useHttp<T, D>(config: AxiosRequestConfig<D>) {
+  const data = ref<T>()
+  const error = ref()
+  http<T>(config)
     .then((res) => {
-      data.value = res.data
+      data.value = res
     })
     .catch((err) => {
       error.value = err
