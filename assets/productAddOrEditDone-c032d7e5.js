@@ -1,0 +1,1 @@
+import{bj as d,bk as s,bl as a,bm as r,f as c}from"./index-dd9b8ed1.js";const u=t=>d.get(s,{params:{id:t}}),p=t=>d.post(s,t),i=t=>d.delete(s,{data:t}),f=t=>d.post(a,t),P=r("productAddOrEditDone",()=>{const t=c(!1);function o(e){t.value=e}return{productAddOrEditDone:t,setProductAddOrEditDone:o}});export{f as a,i as d,u as g,p as s,P as u};
