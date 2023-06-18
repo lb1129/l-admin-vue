@@ -1,15 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": [
-    "env.d.ts",
-    "bmapgl.d.ts",
-    "type-extension.d.ts",
-    "components.d.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "src/mock/userMenuData.json",
-    "src/mock/userProductData.json"
-  ],
+  "include": ["*.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,

@@ -4,6 +4,7 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
 import { tokenLocalforage } from '@/storage/localforage'
 import i18n from '@/i18n'
+import queryString from 'query-string'
 
 export interface IResponse<T> {
   data: T
@@ -17,6 +18,15 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
+    // server是mock的
+    if (import.meta.env.VITE_SERVER_IS_MOCK === 'true') {
+      config.url = queryString.stringifyUrl({
+        url: config.url as string,
+        query: {
+          authorization: await tokenLocalforage.get()
+        }
+      })
+    }
     config.headers.Authorization = await tokenLocalforage.get()
     config.headers['Accept-Language'] = i18n.global.locale.value
     return config
@@ -28,6 +38,17 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
+    // server是mock的
+    if (import.meta.env.VITE_SERVER_IS_MOCK === 'true') {
+      if (response.data.status >= 200 && response.data.status < 300) {
+        return response.data.data
+      } else {
+        if (response.data.status !== 401) {
+          message.error(response.data.data.message)
+        }
+        return Promise.reject(response.data.data.message)
+      }
+    }
     return response.data
   },
   (error) => {
