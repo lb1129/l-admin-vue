@@ -24,10 +24,12 @@ export default defineComponent({
         const children = menu.children
         if (children && children.length) {
           // 根据菜单配置获取菜单图标
-          const Icon = defineAsyncComponent({
-            loader: () => import(`@ant-design/icons-vue/${menu.icon}`),
-            errorComponent: FolderOutlined
-          })
+          const Icon = menu.icon
+            ? defineAsyncComponent({
+                loader: () => import(`@ant-design/icons-vue/${menu.icon}`),
+                errorComponent: FolderOutlined
+              })
+            : FolderOutlined
           result.push(
             <a-sub-menu key={menu.name}>
               {{
