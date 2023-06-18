@@ -7,10 +7,11 @@ import httpPlugin from '@/plugins/http'
 import i18n from '@/i18n'
 import pinia from '@/pinia'
 import '@/assets/style/global.less'
+import '@/mock'
 
 const app = createApp(App)
-// TODO 目录结构重构
-// TODO 页面中的请求要抽取出server.ts模块
+// TODO 图标动态引入
+// TODO 在线切换主题色
 app.use(errorHandlerPlugin)
 app.use(httpPlugin)
 app.use(i18n)
