@@ -1,6 +1,6 @@
-interface UserType {}
-
-interface UserQueryParams {}
+// import http, { type IResponse } from '@/http'
+// import {} from '@/http/api'
+import type { UserType, UserQueryParams } from './types'
 
 export const getUserById = (id: string) => {}
 

@@ -88,7 +88,7 @@ import { breadcrumbSeesion } from '@/storage/session-storage'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
 import { useUserInfo } from '@/pinia/stores/userInfo'
-import { logout } from '@/views/authenticate/server'
+import { logout } from '@/views/authenticate/servers'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const collapsed = ref(false)

@@ -100,12 +100,8 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useResize } from '@/utils/useResize'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
-import {
-  getProducts,
-  deleteProductByIds,
-  type ProductType,
-  type ProductsQueryParamsType
-} from './server'
+import { getProducts, deleteProductByIds } from './servers'
+import type { ProductType, ProductsQueryParamsType } from './types'
 import { storeToRefs } from 'pinia'
 import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
 

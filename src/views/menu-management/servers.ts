@@ -1,6 +1,6 @@
-interface MenuType {}
-
-interface MenuQueryParams {}
+// import http, { type IResponse } from '@/http'
+// import {} from '@/http/api'
+import type { MenuType, MenuQueryParams } from './types'
 
 export const getMenuById = (id: string) => {}
 

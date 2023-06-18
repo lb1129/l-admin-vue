@@ -75,7 +75,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { type FormInstance, message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
-import { getProductById, saveProduct, type ProductType } from './server'
+import { getProductById, saveProduct } from './servers'
+import type { ProductType } from './types'
 import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
 
 const dataLoading = ref(false)

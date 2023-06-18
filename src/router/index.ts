@@ -5,7 +5,8 @@ import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOpe
 import { useMenuData } from '@/pinia/stores/menuData'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { breadcrumbSeesion } from '@/storage/session-storage'
-import { isLogin, getUserInfo, getMenu } from '@/views/authenticate/server'
+import { isLogin } from '@/views/authenticate/servers'
+import { getUserInfo, getMenu } from '@/views/personal-center/servers'
 
 const createHistory =
   import.meta.env.VITE_NOT_SUPPORT_HISTORY === 'true' ? createWebHashHistory : createWebHistory

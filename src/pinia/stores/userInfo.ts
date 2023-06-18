@@ -1,13 +1,10 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
-
-interface UserInfo {
-  userName: string
-}
+import type { UserInfoType } from '@/views/personal-center/types'
 
 export const useUserInfo = defineStore('userInfo', () => {
-  const userInfo = reactive<UserInfo>({ userName: '' })
-  function setUserInfo(info: UserInfo) {
+  const userInfo = reactive<UserInfoType>({ userName: '' })
+  function setUserInfo(info: UserInfoType) {
     Object.assign(userInfo, info)
   }
   return { userInfo, setUserInfo }
