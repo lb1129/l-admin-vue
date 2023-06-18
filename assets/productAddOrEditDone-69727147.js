@@ -1,0 +1,1 @@
+import{Q as d,R as s,S as r,T as a,r as c}from"./index-2c0254e6.js";const u=t=>d.get(s,{params:{id:t}}),p=t=>d.post(s,t),i=t=>d.delete(s,{data:t}),P=t=>d.post(r,t),f=a("productAddOrEditDone",()=>{const t=c(!1);function o(e){t.value=e}return{productAddOrEditDone:t,setProductAddOrEditDone:o}});export{P as a,i as d,u as g,p as s,f as u};
