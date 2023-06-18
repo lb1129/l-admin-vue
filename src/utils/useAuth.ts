@@ -1,5 +1,6 @@
 import { useRoute } from 'vue-router'
-import { useMenuData, type OperateAuthType, type MenuDataItemType } from '@/pinia/stores/menuData'
+import { useMenuData } from '@/pinia/stores/menuData'
+import type { OperateAuthType, MenuDataItemType } from '@/views/personal-center/types'
 
 export const operateAuthValueToDisabled = (operateAuthValue: number | undefined) => {
   // 值为0 无权限 返回true

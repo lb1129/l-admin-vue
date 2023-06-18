@@ -1,5 +1,6 @@
 import { computed, defineComponent, ref, watchEffect, h, type VNode } from 'vue'
-import { useMenuData, type MenuDataItemType } from '@/pinia/stores/menuData'
+import { useMenuData } from '@/pinia/stores/menuData'
+import type { MenuDataItemType } from '@/views/personal-center/types'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'

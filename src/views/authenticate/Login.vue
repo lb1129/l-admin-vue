@@ -54,7 +54,8 @@ import { useI18n } from 'vue-i18n'
 import { tokenLocalforage } from '@/storage/localforage'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useMenuData } from '@/pinia/stores/menuData'
-import { login, getMenu, getUserInfo } from './servers'
+import { login } from './servers'
+import { getMenu, getUserInfo } from '@/views/personal-center/servers'
 
 const formState = reactive({
   userName: '',

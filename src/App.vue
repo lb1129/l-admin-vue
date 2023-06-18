@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { watch, watchEffect, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useMenuData, type MenuDataItemType } from '@/pinia/stores/menuData'
+import { useMenuData } from '@/pinia/stores/menuData'
+import type { MenuDataItemType } from '@/views/personal-center/types'
 import { useRouter, type RouteRecordRaw } from 'vue-router'
 import { getChildrenPath } from '@/router/tools'
 import { lazyLoad } from '@/router/tools'
