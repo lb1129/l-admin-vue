@@ -1,14 +1,11 @@
-import { computed, defineComponent, ref, watchEffect, h, type VNode } from 'vue'
+import { computed, defineComponent, defineAsyncComponent, ref, watchEffect, type VNode } from 'vue'
 import { useMenuData } from '@/pinia/stores/menuData'
 import type { MenuDataItemType } from '@/views/personal-center/types'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
-import { ShopOutlined } from '@ant-design/icons-vue'
-
-const iconMap = new Map()
-iconMap.set('shop-outlined', ShopOutlined)
+import { FolderOutlined } from '@ant-design/icons-vue'
 
 export default defineComponent({
   props: {
@@ -26,14 +23,18 @@ export default defineComponent({
       list.forEach((menu) => {
         const children = menu.children
         if (children && children.length) {
-          const icon = iconMap.get(menu.icon)
+          // 根据菜单配置获取菜单图标
+          const Icon = defineAsyncComponent({
+            loader: () => import(`@ant-design/icons-vue/${menu.icon}`),
+            errorComponent: FolderOutlined
+          })
           result.push(
             <a-sub-menu key={menu.name}>
               {{
                 default: () => generateMenuItems(children),
                 title: () => (
                   <span>
-                    {icon ? h(icon) : <folder-outlined />}
+                    <Icon />
                     <span>{t(menu.name)}</span>
                   </span>
                 )
