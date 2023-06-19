@@ -26,7 +26,7 @@
         :rules="[
           {
             required: true,
-            validator: (rule, value) => {
+            validator: (rule: RuleObject, value: string) => {
               if (!value) return promise.reject($t('pleaseEnterPassword'))
               if (formState.password && value !== formState.password)
                 return promise.reject($t('twoPasswordsDoNotMatch'))
@@ -87,6 +87,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import Layout from './Layout.vue'
+import type { RuleObject } from 'ant-design-vue/es/form'
 const formState = reactive<{
   userName: string
   password: string

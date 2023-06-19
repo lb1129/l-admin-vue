@@ -9,12 +9,12 @@
       :scroll="{ x: 1200, y: height }"
       :row-selection="{
         selectedRowKeys,
-        onChange: (keys) => {
+        onChange: (keys: Key[]) => {
           selectedRowKeys = keys as string[]
         }
       }"
       @resizeColumn="
-        (w, col) => {
+        (w: number, col: TableColumnType<ProductType>) => {
           col.width = w
         }
       "
@@ -104,6 +104,7 @@ import { getProducts, deleteProductByIds } from './servers'
 import type { ProductType, ProductsQueryParamsType } from './types'
 import { storeToRefs } from 'pinia'
 import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
+import type { Key } from 'ant-design-vue/es/table/interface'
 
 const wrapRef = ref<HTMLElement>()
 const dataLoading = ref(false)
