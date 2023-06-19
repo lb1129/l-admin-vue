@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { watch, watchEffect, ref } from 'vue'
+import { watch, watchEffect, ref, onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMenuData } from '@/pinia/stores/menuData'
 import type { MenuDataItemType } from '@/views/personal-center/types'
 import { useRouter, type RouteRecordRaw } from 'vue-router'
 import { getChildrenPath } from '@/router/tools'
 import { lazyLoad } from '@/router/tools'
+import { initThemeColor } from '@/utils/themeColor'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
@@ -26,6 +27,10 @@ watchEffect(() => {
     aLocale.value = zhCN
     dayjs.locale('zh-cn')
   }
+})
+
+onBeforeMount(() => {
+  initThemeColor()
 })
 
 // 菜单数据生成动态路由
