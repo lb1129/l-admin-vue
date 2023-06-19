@@ -10,8 +10,7 @@ import '@/assets/style/global.less'
 import '@/mock'
 
 const app = createApp(App)
-// TODO 图标动态引入
-// TODO 在线切换主题色
+
 app.use(errorHandlerPlugin)
 app.use(httpPlugin)
 app.use(i18n)
