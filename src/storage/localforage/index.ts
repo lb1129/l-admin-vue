@@ -1,5 +1,5 @@
 import localforage from 'localforage'
-import { token } from './keys'
+import { token, themeColor } from './keys'
 
 localforage.config({
   name: import.meta.env.VITE_SYSTEM_NAME,
@@ -16,5 +16,18 @@ export const tokenLocalforage = {
   },
   async clear() {
     return localforage.removeItem(token)
+  }
+}
+
+export const themeLocalforage = {
+  async get() {
+    const value = await localforage.getItem<string>(themeColor)
+    return value ?? ''
+  },
+  async set(value: string) {
+    return localforage.setItem(themeColor, value)
+  },
+  async clear() {
+    return localforage.removeItem(themeColor)
   }
 }
