@@ -6,6 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import dynamicImport from 'vite-plugin-dynamic-import'
+import dynamicTheme from './vite-plugin-dynamic-theme'
 
 const config: UserConfig = {
   server: {
@@ -30,7 +31,8 @@ const config: UserConfig = {
           return true
         }
       }
-    })
+    }),
+    dynamicTheme('#1890ff')
   ],
   resolve: {
     alias: {
@@ -43,7 +45,9 @@ const config: UserConfig = {
       less: {
         // 为每个样式内容注入变量文件
         additionalData: `@import "@/assets/style/variable.less";`,
-        modifyVars: {},
+        modifyVars: {
+          // '@primary-color': '#1890ff'
+        },
         javascriptEnabled: true
       }
     }
