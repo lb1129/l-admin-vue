@@ -10,6 +10,31 @@
       <div class="index-header-center"></div>
       <div class="index-header-right">
         <a-dropdown>
+          <span class="index-header-right-item">
+            <BgColorsOutlined style="font-size: 16px" />
+          </span>
+          <template #overlay>
+            <ColorPicker
+              v-model:value="themeColor"
+              @update:value="
+                (color) => {
+                  toggleThemeColor(color.hex)
+                }
+              "
+              :presetColors="[
+                '#1677ff',
+                '#f5222d',
+                '#fa541c',
+                '#faad14',
+                '#13c2c2',
+                '#52c41a',
+                '#2f54eb',
+                '#722ed1'
+              ]"
+            />
+          </template>
+        </a-dropdown>
+        <a-dropdown>
           <span class="index-header-right-item index-header-right-item_user">
             <a-avatar size="small" :src="userPng" />
             <span style="margin-left: 8px">{{ userInfoStore.userInfo.userName }}</span>
@@ -73,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onBeforeMount } from 'vue'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -89,9 +114,12 @@ import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { logout } from '@/views/authenticate/servers'
+import { themeLocalforage } from '@/storage/localforage'
+import { toggleThemeColor } from '@/utils/themeColor'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const collapsed = ref(false)
+const themeColor = ref('#1890ff')
 const { t } = useI18n()
 const router = useRouter()
 const breadcrumbStore = useBreadcrumb()
@@ -140,6 +168,11 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
       break
   }
 }
+
+onBeforeMount(async () => {
+  const val = await themeLocalforage.get()
+  if (val) themeColor.value = val
+})
 </script>
 <style scoped lang="less">
 .index {
