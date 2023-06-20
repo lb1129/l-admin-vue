@@ -9,19 +9,20 @@
       </div>
       <div class="index-header-center"></div>
       <div class="index-header-right">
-        <a-dropdown>
+        <a-dropdown v-model:visible="pickerVisible">
           <span class="index-header-right-item">
             <BgColorsOutlined style="font-size: 16px" />
           </span>
           <template #overlay>
             <ColorPicker
-              v-model:value="themeColor"
+              @click="pickerVisible = true"
+              :value="themeColor"
               @update:value="
                 (color) => {
                   toggleThemeColor(color.hex)
                 }
               "
-              :presetColors="[
+              :presets="[
                 '#1677ff',
                 '#f5222d',
                 '#fa541c',
@@ -120,6 +121,7 @@ import { toggleThemeColor } from '@/utils/themeColor'
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const collapsed = ref(false)
 const themeColor = ref('#1890ff')
+const pickerVisible = ref(false)
 const { t } = useI18n()
 const router = useRouter()
 const breadcrumbStore = useBreadcrumb()
