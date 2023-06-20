@@ -1,19 +1,14 @@
 <template>
-  <div :class="['vc-hue', directionClass]">
+  <div :class="['vc-hue', 'vc-hue-horizontal']">
     <div
       class="vc-hue-container"
       role="slider"
-      :aria-valuenow="colors.hsl.h"
       aria-valuemin="0"
       aria-valuemax="360"
       ref="container"
       @mousedown="handleMouseDown"
     >
-      <div
-        class="vc-hue-pointer"
-        :style="{ top: pointerTop, left: pointerLeft }"
-        role="presentation"
-      >
+      <div class="vc-hue-pointer" :style="{ left: pointerLeft }" role="presentation">
         <div class="vc-hue-picker"></div>
       </div>
     </div>
@@ -21,23 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
-const props = withDefaults(
-  defineProps<{
-    value: {
-      hex: string
-      hex8: string
-      hsl: { h: number; s: number; l: number; a: number }
-      hsv: { h: number; s: number; v: number; a: number }
-      rgba: { r: number; g: number; b: number; a: number }
-      a: number
-    }
-    direction?: 'horizontal' | 'vertical'
-  }>(),
-  {
-    direction: 'horizontal'
-  }
-)
+import { ref, computed } from 'vue'
+const props = defineProps<{
+  value: { h: number; s: number; l: number; a: number }
+}>()
+
 const emit = defineEmits<{
   change: [
     data: {
@@ -45,103 +28,49 @@ const emit = defineEmits<{
       s: number
       l: number
       a: number
-      source: string
     }
   ]
 }>()
-const oldHue = ref(0)
-const pullDirection = ref('')
+
 const container = ref()
-
-const colors = computed(() => props.value)
-
-watch(colors, (value) => {
-  const h = value.hsl.h
-  if (h !== 0 && h - oldHue.value > 0) pullDirection.value = 'right'
-  if (h !== 0 && h - oldHue.value < 0) pullDirection.value = 'left'
-  oldHue.value = h
-})
-
-const directionClass = computed(() => ({
-  'vc-hue-horizontal': props.direction === 'horizontal',
-  'vc-hue-vertical': props.direction === 'vertical'
-}))
-
-const pointerTop = computed(() => {
-  if (props.direction === 'vertical') {
-    if (colors.value.hsl.h === 0 && pullDirection.value === 'right') return 0
-    return -((colors.value.hsl.h * 100) / 360) + 100 + '%'
-  } else {
-    return 0
-  }
-})
+const needKeep = ref(false)
 
 const pointerLeft = computed(() => {
-  if (props.direction === 'vertical') {
-    return 0
-  } else {
-    if (colors.value.hsl.h === 0 && pullDirection.value === 'right') return '100%'
-    return (colors.value.hsl.h * 100) / 360 + '%'
-  }
+  // https://github.com/bgrins/TinyColor/issues/168
+  if (needKeep.value) return '100%'
+  return (props.value.h * 100) / 360 + '%'
 })
 
 const handleChange = (e: MouseEvent) => {
   e.preventDefault()
-
   if (!container.value) {
     return
   }
   var containerWidth = container.value.clientWidth
-  var containerHeight = container.value.clientHeight
-
   var xOffset = container.value.getBoundingClientRect().left + window.pageXOffset
-  var yOffset = container.value.getBoundingClientRect().top + window.pageYOffset
   var pageX = e.pageX
-  var pageY = e.pageY
   var left = pageX - xOffset
-  var top = pageY - yOffset
 
   var h
   var percent
 
-  if (props.direction === 'vertical') {
-    if (top < 0) {
-      h = 360
-    } else if (top > containerHeight) {
-      h = 0
-    } else {
-      percent = -((top * 100) / containerHeight) + 100
-      h = (360 * percent) / 100
-    }
-
-    if (colors.value.hsl.h !== h) {
-      emit('change', {
-        h: h,
-        s: colors.value.hsl.s,
-        l: colors.value.hsl.l,
-        a: colors.value.hsl.a,
-        source: 'hsl'
-      })
-    }
+  if (left < 0) {
+    h = 0
+  } else if (left > containerWidth) {
+    h = 360
   } else {
-    if (left < 0) {
-      h = 0
-    } else if (left > containerWidth) {
-      h = 360
-    } else {
-      percent = (left * 100) / containerWidth
-      h = (360 * percent) / 100
-    }
+    percent = (left * 100) / containerWidth
+    h = (360 * percent) / 100
+  }
+  needKeep.value = h >= 360
 
-    if (colors.value.hsl.h !== h) {
-      emit('change', {
-        h: h,
-        s: colors.value.hsl.s,
-        l: colors.value.hsl.l,
-        a: colors.value.hsl.a,
-        source: 'hsl'
-      })
-    }
+  if (props.value.h !== h) {
+    emit('change', {
+      h: h,
+      s: props.value.s,
+      l: props.value.l,
+      a: props.value.a
+    })
   }
 }
 const handleMouseDown = () => {

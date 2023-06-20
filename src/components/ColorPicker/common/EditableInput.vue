@@ -1,85 +1,132 @@
 <template>
   <div class="vc-editable-input">
     <input
-      :aria-labelledby="labelId"
       class="vc-input-input"
-      v-model="val"
+      :value="innerValue"
       @keydown="handleKeyDown"
-      @input="update"
+      @input="inputHandle"
+      @blur="blurHandle"
       ref="input"
     />
-    <span :for="label" class="vc-input-label" :id="labelId">{{ labelSpanText }}</span>
-    <span class="vc-input__desc">{{ desc }}</span>
+    <span class="vc-input-label">{{ label }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-const input = ref<HTMLInputElement>()
-const props = defineProps({
-  label: String,
-  labelText: String,
-  desc: String,
-  value: [String, Number],
-  max: Number,
-  min: Number,
-  arrowOffset: {
-    type: Number,
-    default: 1
-  }
-})
-const emit = defineEmits(['change'])
+import { ref, watchPostEffect } from 'vue'
 
-const val = computed({
-  get() {
-    return props.value
-  },
-  set(v) {
-    // TODO: min
-    if (!(props.max === undefined) && +(v ?? 0) > props.max) {
-      if (input.value) input.value.value = String(props.max)
-    } else {
-      return v
-    }
+const props = withDefaults(
+  defineProps<{
+    label: string
+    value: string | number
+    type?: 'text' | 'number'
+    max?: number
+    min?: number
+    step?: number
+    precision?: number
+  }>(),
+  {
+    type: 'number',
+    max: 255,
+    min: 0,
+    step: 1,
+    precision: 0
   }
-})
-
-const labelId = computed(
-  () => `input__label__${props.label}__${Math.random().toString().slice(2, 5)}`
 )
+const emit = defineEmits<{
+  change: [value: string | number]
+}>()
 
-const labelSpanText = computed(() => props.labelText || props.label)
+const input = ref<HTMLInputElement>()
+const innerValue = ref<string | number>(props.value)
 
-const handleChange = (newVal: string) => {
-  let data: Record<string, unknown> = {}
-  if (props.label) data[props.label] = newVal
-  if (data.hex === undefined && data['#'] === undefined) {
-    emit('change', data)
-  } else if (newVal.length > 5) {
-    emit('change', data)
+watchPostEffect(() => {
+  innerValue.value = props.value
+})
+
+const inputHandle = (e: Event) => {
+  // @ts-ignore-next-line
+  const inputVal = e.target.value as string
+  if (props.type === 'number') {
+    // 错误值：不是数字 不在最大最小范围内 小数位数不符合 可一直输入  但是不触发事件
+    const numberInputVal = Number(inputVal)
+    if (isNaN(numberInputVal)) return
+    if (props.max >= 0 && numberInputVal > props.max) return
+    if (props.min >= 0 && numberInputVal < props.min) return
+    if (props.precision === 0 && inputVal.indexOf('.') > -1) return
+    if (props.precision > 0) {
+      const reg1 = new RegExp(`^0(\\.[0-9]{0,${props.precision}})?$`)
+      const reg2 = new RegExp(`^[1-9]+(\\.[0-9]{0,${props.precision}})?$`)
+      if (!reg1.test(inputVal) && !reg2.test(inputVal)) return
+    }
+    innerValue.value = numberInputVal
+    emit('change', numberInputVal)
+  } else {
+    emit('change', inputVal)
   }
 }
 
-const update = () => {
-  handleChange(`${val.value}`)
+// 失去焦点时 把值格式化还原
+const blurHandle = (e: Event) => {
+  // @ts-ignore-next-line
+  const inputVal = e.target.value as string
+  if (props.type === 'number') {
+    const numberInputVal = Number(inputVal)
+    // 不是数字 还原为当前合法值
+    if (isNaN(numberInputVal)) {
+      if (input.value) input.value.value = String(innerValue.value)
+    } else if (props.max >= 0 && numberInputVal > props.max) {
+      // 是数字 但是大于最大值 还原为最大值
+      if (input.value) input.value.value = String(props.max)
+      // 当前合法值不是最大值时 更新当前合法值并派发事件
+      if (innerValue.value !== props.max) {
+        innerValue.value = props.max
+        emit('change', props.max)
+      }
+    } else if (props.min >= 0 && numberInputVal < props.min) {
+      // 是数字 但是小于最小值 还原为最小值
+      if (input.value) input.value.value = String(props.min)
+      // 当前合法值不是最小值时 更新当前合法值并派发事件
+      if (innerValue.value !== props.min) {
+        innerValue.value = props.min
+        emit('change', props.min)
+      }
+    } else if (props.precision === 0 && inputVal.indexOf('.') > -1) {
+      // 是数字 但是小数位不符合 还原为当前合法值
+      if (input.value) input.value.value = String(innerValue.value)
+    } else if (props.precision > 0) {
+      // 是数字 但是小数位不符合 还原为当前合法值
+      const reg1 = new RegExp(`^0(\\.[0-9]{0,${props.precision}})?$`)
+      const reg2 = new RegExp(`^[1-9]+(\\.[0-9]{0,${props.precision}})?$`)
+      if (!reg1.test(inputVal) && !reg2.test(inputVal)) {
+        if (input.value) input.value.value = String(innerValue.value)
+      }
+    }
+  }
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
-  let number = Number(val.value)
-
-  if (number) {
-    let amount = props.arrowOffset || 1
-
+  if (props.type === 'number') {
+    const number = Number(innerValue.value)
     // Up
     if (e.keyCode === 38) {
-      handleChange(`${number + amount}`)
       e.preventDefault()
+      const upValue = number + props.step
+      // 计算值小于等于最大值 且 当前合法值不等于最大值 时 更新当前合法值 派发事件
+      if (props.max >= 0 && upValue <= props.max && innerValue.value !== props.max) {
+        innerValue.value = upValue
+        emit('change', upValue)
+      }
     }
-
     // Down
     if (e.keyCode === 40) {
-      handleChange(`${number - amount}`)
       e.preventDefault()
+      const downValue = number - props.step
+      // 计算值大于等于最小值 且 当前合法值不等于最小值 时 更新当前合法值 派发事件
+      if (props.min >= 0 && downValue >= props.min && innerValue.value !== props.min) {
+        innerValue.value = downValue
+        emit('change', downValue)
+      }
     }
   }
 }
@@ -94,9 +141,5 @@ const handleKeyDown = (e: KeyboardEvent) => {
   padding: 0;
   border: 0;
   outline: none;
-}
-
-.vc-input-label {
-  text-transform: capitalize;
 }
 </style>

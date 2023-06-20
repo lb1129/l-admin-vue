@@ -18,28 +18,21 @@ import Checkboard from './Checkboard.vue'
 
 const container = ref<HTMLElement>()
 const props = defineProps<{
-  value: {
-    hex: string
-    hex8: string
-    hsl: { h: number; s: number; l: number; a: number }
-    hsv: { h: number; s: number; v: number; a: number }
-    rgba: { r: number; g: number; b: number; a: number }
-    a: number
-  }
+  value: { r: number; g: number; b: number; a: number }
 }>()
 const emit = defineEmits<{
   change: [
     data: {
-      h: number
-      s: number
-      l: number
+      r: number
+      g: number
+      b: number
       a: number
-      source: string
     }
   ]
 }>()
+
 const gradientColor = computed(() => {
-  var rgba = props.value.rgba
+  var rgba = props.value
   var rgbStr = [rgba.r, rgba.g, rgba.b].join(',')
   return 'linear-gradient(to right, rgba(' + rgbStr + ', 0) 0%, rgba(' + rgbStr + ', 1) 100%)'
 })
@@ -66,11 +59,10 @@ const handleChange = (e: MouseEvent) => {
 
   if (props.value.a !== a) {
     emit('change', {
-      h: props.value.hsl.h,
-      s: props.value.hsl.s,
-      l: props.value.hsl.l,
-      a: a,
-      source: 'rgba'
+      r: props.value.r,
+      g: props.value.g,
+      b: props.value.b,
+      a: a
     })
   }
 }

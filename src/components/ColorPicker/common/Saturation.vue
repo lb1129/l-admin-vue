@@ -16,25 +16,25 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { throttle } from 'lodash-es'
+
 const props = defineProps<{
-  value: {
-    hex: string
-    hex8: string
-    hsl: { h: number; s: number; l: number; a: number }
-    hsv: { h: number; s: number; v: number; a: number }
-    rgba: { r: number; g: number; b: number; a: number }
-    a: number
-  }
+  value: { h: number; s: number; v: number; a: number }
 }>()
 const emit = defineEmits<{
-  change: [data: any]
+  change: [
+    data: {
+      h: number
+      s: number
+      v: number
+      a: number
+    }
+  ]
 }>()
 
 const container = ref()
-const colors = computed(() => props.value)
-const bgColor = computed(() => `hsl(${colors.value.hsv.h}, 100%, 50%)`)
-const pointerTop = computed(() => -(colors.value.hsv.v * 100) + 1 + 100 + '%')
-const pointerLeft = computed(() => colors.value.hsv.s * 100 + '%')
+const bgColor = computed(() => `hsl(${props.value.h}, 100%, 50%)`)
+const pointerTop = computed(() => -(props.value.v * 100) + 1 + 100 + '%')
+const pointerLeft = computed(() => props.value.s * 100 + '%')
 
 const clamp = (value: number, min: number, max: number) => {
   return min < max
@@ -70,11 +70,10 @@ const handleChange = (e: MouseEvent) => {
   throttle(
     () => {
       emit('change', {
-        h: colors.value.hsv.h,
+        h: props.value.h,
         s: saturation,
         v: bright,
-        a: colors.value.hsv.a,
-        source: 'hsva'
+        a: props.value.a
       })
     },
     20,
