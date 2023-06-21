@@ -77,7 +77,7 @@ watch(menuDataStore, () => {
     router.addRoute({
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: lazyLoad('mixed', 'NotFound')
+      component: lazyLoad('sundry', 'NotFound')
     })
     // NOTE 路由同步操作 上一个操作会被取消掉 暂未找到api可以让操作都执行
     // NOTE 等上一个路由地址更新完成 再触发重新匹配

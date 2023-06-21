@@ -43,8 +43,8 @@ const routers: RouteRecordRaw[] = [
   },
   {
     path: '/privacy',
-    name: 'Privacy',
-    component: lazyLoad('mixed', 'Privacy')
+    name: 'PrivacyPolicy',
+    component: lazyLoad('sundry', 'PrivacyPolicy')
   },
   {
     path: '/:pathMatch(.*)*',
