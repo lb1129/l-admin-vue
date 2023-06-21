@@ -64,9 +64,11 @@
         }"
       >
         <template v-if="column.key === 'name'">
-          <router-link :to="{ name: 'ProductDetail', params: { id: record.id } }">{{
-            record.name
-          }}</router-link>
+          <link-plus
+            :disabled="operateAuthValueToDisabled(operateAuth.detail)"
+            :to="{ name: 'ProductDetail', params: { id: record.id } }"
+            >{{ record.name }}</link-plus
+          >
         </template>
         <template v-else-if="column.key === 'operation'">
           <a-button
@@ -172,7 +174,8 @@ const columns = ref<TableColumnType<ProductType>[]>([
     dataIndex: 'operation',
     key: 'operation',
     width: 180,
-    fixed: 'right'
+    fixed: 'right',
+    align: 'center'
   }
 ])
 const dataSource = ref<ProductType[]>([])
