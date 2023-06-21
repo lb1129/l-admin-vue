@@ -22,6 +22,6 @@ const to = computed(() => {
 <style scoped lang="less">
 .disabled {
   cursor: not-allowed;
-  color: rgba(0, 0, 0, 0.25);
+  color: rgb(0 0 0 / 25%);
 }
 </style>
