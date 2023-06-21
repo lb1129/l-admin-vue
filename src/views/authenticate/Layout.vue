@@ -11,7 +11,7 @@
     <div class="authenticate-footer">
       Copyright © 2023 {{ systemName }}<a-divider type="vertical" /><router-link
         target="_blank"
-        :to="{ name: 'Privacy' }"
+        :to="{ name: 'PrivacyPolicy' }"
         >{{ $t('privacyPolicy') }}</router-link
       >
     </div>
