@@ -1,5 +1,5 @@
 <template>
-  <a-page-header :ghost="false" :title="t('detail')" @back="() => $router.back()">
+  <a-page-header :title="t('detail')" @back="() => $router.back()">
     <template #extra>
       <a-button
         type="primary"

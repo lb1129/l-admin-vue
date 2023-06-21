@@ -1,5 +1,5 @@
 <template>
-  <a-page-header :ghost="false" :title="title" @back="() => $router.back()">
+  <a-page-header :title="title" @back="() => $router.back()">
     <template #extra>
       <a-button type="primary" @click="saveHandler" :loading="submitLoading">{{
         t('save')
