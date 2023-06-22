@@ -1,12 +1,21 @@
+<template>
+  <a-config-provider :locale="aLocale" :input="{ autocomplete: 'off' }">
+    <router-view />
+  </a-config-provider>
+</template>
+
 <script setup lang="ts">
 import { watch, watchEffect, ref, onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMenuData } from '@/pinia/stores/menuData'
 import type { MenuDataItemType } from '@/views/personal-center/types'
+import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useRouter, type RouteRecordRaw } from 'vue-router'
 import { getChildrenPath } from '@/router/tools'
 import { lazyLoad } from '@/router/tools'
 import { initThemeColor } from '@/utils/themeColor'
+import { isLogin } from '@/views/authenticate/servers'
+import { getUserInfo, getMenu } from '@/views/personal-center/servers'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
@@ -17,6 +26,7 @@ const { locale } = useI18n()
 const aLocale = ref<typeof enUS>()
 
 const menuDataStore = useMenuData()
+const userInfoStore = useUserInfo()
 const router = useRouter()
 
 watchEffect(() => {
@@ -29,8 +39,24 @@ watchEffect(() => {
   }
 })
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   initThemeColor()
+  try {
+    await isLogin()
+    const userInfoRes = await getUserInfo()
+    const menuRes = await getMenu()
+    // 更新pinia内的菜单数据
+    menuDataStore.setMenuData(menuRes.data)
+    // 将pinia内菜单数据获取状态设置为完成
+    menuDataStore.setMenuDataDone(true)
+    // 更新pinia内的用户信息
+    userInfoStore.setUserInfo(userInfoRes.data)
+    // 将pinia内菜单数据获取状态设置为完成
+    menuDataStore.setMenuDataDone(true)
+  } catch (error) {
+    // 将pinia内菜单数据获取状态设置为完成
+    menuDataStore.setMenuDataDone(true)
+  }
 })
 
 // 菜单数据生成动态路由
@@ -87,11 +113,5 @@ watch(menuDataStore, () => {
   }
 })
 </script>
-
-<template>
-  <a-config-provider :locale="aLocale" :input="{ autocomplete: 'off' }">
-    <router-view />
-  </a-config-provider>
-</template>
 
 <style scoped></style>
