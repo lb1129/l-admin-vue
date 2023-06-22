@@ -3,8 +3,11 @@ import config from '@/config'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
 import { tokenLocalforage } from '@/storage/localforage'
+import { breadcrumbSeesion } from '@/storage/session-storage'
+import isAuthenticated from '@/router/isAuthenticated'
 import i18n from '@/i18n'
 import queryString from 'query-string'
+import router from '@/router'
 
 export interface IResponse<T> {
   data: T
@@ -37,13 +40,23 @@ axiosInstance.interceptors.request.use(
 )
 
 axiosInstance.interceptors.response.use(
-  (response) => {
+  async (response) => {
     // server是mock的
     if (import.meta.env.VITE_SERVER_IS_MOCK === 'true') {
       if (response.data.status >= 200 && response.data.status < 300) {
         return response.data.data
       } else {
-        if (response.data.status !== 401) {
+        // 401 未登录
+        if (response.data.status === 401) {
+          if (router.currentRoute.value.meta.needAuth === true) {
+            isAuthenticated.value = Promise.reject()
+            await tokenLocalforage.clear()
+            breadcrumbSeesion.clear()
+            router.replace({
+              name: 'Login'
+            })
+          }
+        } else {
           message.error(response.data.data.message)
         }
         return Promise.reject(response.data.data.message)
@@ -51,9 +64,18 @@ axiosInstance.interceptors.response.use(
     }
     return response.data
   },
-  (error) => {
-    // 401 未登录重定向交给路由守卫处理
-    if (error.response.status !== 401) {
+  async (error) => {
+    // 401 未登录
+    if (error.response.status === 401) {
+      if (router.currentRoute.value.meta.needAuth === true) {
+        isAuthenticated.value = Promise.reject()
+        await tokenLocalforage.clear()
+        breadcrumbSeesion.clear()
+        router.replace({
+          name: 'Login'
+        })
+      }
+    } else {
       message.error(error.response.data.message)
     }
     return Promise.reject(error)
