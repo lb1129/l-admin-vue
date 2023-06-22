@@ -110,7 +110,6 @@ import logoSvg from '@/assets/image/logo.svg'
 import userPng from '@/assets/image/user.png'
 import IndexMenu from './IndexMenu'
 import { tokenLocalforage } from '@/storage/localforage'
-import { breadcrumbSeesion } from '@/storage/session-storage'
 import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
 import { useUserInfo } from '@/pinia/stores/userInfo'
@@ -152,7 +151,6 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
           try {
             await logout()
             await tokenLocalforage.clear()
-            breadcrumbSeesion.clear()
             message.destroy()
             router.replace({
               name: 'Login'

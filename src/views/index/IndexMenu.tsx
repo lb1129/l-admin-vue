@@ -1,7 +1,6 @@
 import { computed, defineComponent, defineAsyncComponent, ref, watchEffect, type VNode } from 'vue'
 import { useMenuData } from '@/pinia/stores/menuData'
 import type { MenuDataItemType } from '@/views/personal-center/types'
-import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
@@ -13,7 +12,6 @@ export default defineComponent({
   },
   setup(props) {
     const menuDataStore = useMenuData()
-    const breadcrumbStore = useBreadcrumb()
     const { t } = useI18n()
     const route = useRoute()
     const router = useRouter()
@@ -57,17 +55,9 @@ export default defineComponent({
     }
     // 菜单点击处理
     const clickHandle = (menuInfo: MenuInfo) => {
-      // 回退面包屑
-      if (breadcrumbStore.breadcrumb.length > 1) {
-        router.go(1 - breadcrumbStore.breadcrumb.length)
-      }
-      // NOTE 路由同步操作 上一个操作会被取消掉 暂未找到api可以让操作都执行
-      // NOTE 等路由地址回退完成后 再push路由
-      setTimeout(() => {
-        router.push({
-          name: menuInfo.key as string
-        })
-      }, 10)
+      router.push({
+        name: menuInfo.key as string
+      })
     }
     // 左侧菜单选中keys 路由与菜单selectedKeys联动
     const selectedKeys = computed(() => [route.name])
