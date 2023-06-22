@@ -1,1 +1,1 @@
-export const breadcrumb = 'breadcrumb'
+export const test = 'test'
