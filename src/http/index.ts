@@ -3,7 +3,6 @@ import config from '@/config'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
 import { tokenLocalforage } from '@/storage/localforage'
-import { breadcrumbSeesion } from '@/storage/session-storage'
 import isAuthenticated from '@/router/isAuthenticated'
 import i18n from '@/i18n'
 import queryString from 'query-string'
@@ -51,7 +50,6 @@ axiosInstance.interceptors.response.use(
           if (router.currentRoute.value.meta.needAuth === true) {
             isAuthenticated.value = Promise.reject()
             await tokenLocalforage.clear()
-            breadcrumbSeesion.clear()
             router.replace({
               name: 'Login'
             })
@@ -70,7 +68,6 @@ axiosInstance.interceptors.response.use(
       if (router.currentRoute.value.meta.needAuth === true) {
         isAuthenticated.value = Promise.reject()
         await tokenLocalforage.clear()
-        breadcrumbSeesion.clear()
         router.replace({
           name: 'Login'
         })
