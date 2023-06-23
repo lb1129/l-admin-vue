@@ -92,11 +92,12 @@ watch(menuDataStore, () => {
     return res
   }
   const routes = generateRoutes(menuDataStore.menuData)
-  routes.forEach((route) => {
-    router.addRoute('Index', route)
-  })
+  // 菜单获取状态为完成后
   if (menuDataStore.menuDataDone) {
-    // 动态路由添加完成
+    // 添加动态路由
+    routes.forEach((route) => {
+      router.addRoute('Index', route)
+    })
     // 先删除404路由
     // 再添加404路由 component 挂载为 404视图
     router.removeRoute('NotFound')
