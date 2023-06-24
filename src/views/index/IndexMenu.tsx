@@ -66,15 +66,7 @@ export default defineComponent({
     // 路由与菜单openKeys联动
     watchEffect(() => {
       if (!props.collapsed) {
-        const keys: string[] = []
-        const matched = route.matched
-        for (let i = matched.length - 2; i > 0; i--) {
-          const record = matched[i]
-          if (record.children.some((child) => child.name === route.name)) {
-            keys.push(record.name as string)
-          }
-        }
-        openKeys.value = keys
+        openKeys.value = route.matched.slice(1, -1).map((item) => item.name as string)
       }
     })
     // 菜单节点
