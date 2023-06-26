@@ -94,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import type { TableColumnType, TableProps } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
@@ -104,9 +104,9 @@ import { useResize } from '@/utils/useResize'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
 import { getProducts, deleteProductByIds } from './servers'
 import type { ProductType, ProductsQueryParamsType } from './types'
-import { storeToRefs } from 'pinia'
-import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
 import type { Key } from 'ant-design-vue/es/table/interface'
+import pubsub from '@/pubsub'
+import { productEditDone } from '@/pubsub/events'
 
 const wrapRef = ref<HTMLElement>()
 const dataLoading = ref(false)
@@ -191,7 +191,6 @@ const router = useRouter()
 const { t } = useI18n()
 const { operateAuth } = useAuth()
 const { height } = useResize(wrapRef, { minusHeight: 64.8 + 64 + 54.8 })
-const { productAddOrEditDone } = storeToRefs(useProductAddOrEditDone())
 
 const addOrEditHandle = (id?: string) => {
   router.push({
@@ -239,12 +238,15 @@ const loadData = async () => {
   }
 }
 
-watch(queryParams, loadData, { immediate: true })
-
-// 监听产品新增或编辑完成状态 为true 刷新数据
-watch(productAddOrEditDone, (value) => {
-  if (value) loadData()
+onMounted(() => {
+  pubsub.on(productEditDone, loadData)
 })
+
+onUnmounted(() => {
+  pubsub.off(productEditDone, loadData)
+})
+
+watch(queryParams, loadData, { immediate: true })
 </script>
 
 <style scoped lang="less"></style>

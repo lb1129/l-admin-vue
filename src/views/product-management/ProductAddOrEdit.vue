@@ -77,7 +77,8 @@ import { type FormInstance, message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
 import { getProductById, saveProduct } from './servers'
 import type { ProductType } from './types'
-import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
+import pubsub from '@/pubsub'
+import { productEditDone } from '@/pubsub/events'
 
 const dataLoading = ref(false)
 const submitLoading = ref(false)
@@ -97,7 +98,6 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const title = computed(() => (route.params.id ? t('edit') : t('add')))
-const { setProductAddOrEditDone } = useProductAddOrEditDone()
 
 const saveHandler = async () => {
   if (formRef.value) {
@@ -106,8 +106,7 @@ const saveHandler = async () => {
     try {
       await saveProduct(details.value)
       submitLoading.value = false
-      // 产品新增或编辑完成状态设为true
-      setProductAddOrEditDone(true)
+      pubsub.emit(productEditDone)
       message.success(t('whatSuccess', [t('save')]))
       router.back()
     } catch (error) {
@@ -117,8 +116,6 @@ const saveHandler = async () => {
 }
 
 onMounted(async () => {
-  // 产品新增或编辑完成状态设为false
-  setProductAddOrEditDone(false)
   if (route.params.id) {
     dataLoading.value = true
     try {

@@ -28,14 +28,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
 import { getProductById } from './servers'
 import type { ProductType } from './types'
-import { storeToRefs } from 'pinia'
-import { useProductAddOrEditDone } from '@/pinia/stores/productAddOrEditDone'
+import pubsub from '@/pubsub'
+import { productEditDone } from '@/pubsub/events'
 
 const dataLoading = ref(false)
 const details = ref<ProductType>({
@@ -52,7 +52,6 @@ const details = ref<ProductType>({
 const { operateAuth } = useAuth()
 const route = useRoute()
 const { t } = useI18n()
-const { productAddOrEditDone } = storeToRefs(useProductAddOrEditDone())
 
 const loadData = async () => {
   if (route.params.id) {
@@ -69,11 +68,11 @@ const loadData = async () => {
 
 onMounted(() => {
   loadData()
+  pubsub.on(productEditDone, loadData)
 })
 
-// 监听产品新增或编辑完成状态 为true 刷新数据
-watch(productAddOrEditDone, (value) => {
-  if (value) loadData()
+onUnmounted(() => {
+  pubsub.off(productEditDone, loadData)
 })
 </script>
 
