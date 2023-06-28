@@ -1,4 +1,14 @@
 <p align="center">
+  <a href="https://ng-alain.com">
+    <img width="100" src="https://github.com/lb1129/l-admin-vue/blob/master/src/assets/image/logo.svg">
+  </a>
+</p>
+
+<h1 align="center">L-ADMIN-VUE</h1>
+
+<p align="center">一个基于 Antd 中后台前端解决方案，提供通用性封装及规范，让开发者更加专注于业务</p>
+
+<p align="center">
   <a href="https://github.com/vuejs/core">
     <img src="https://img.shields.io/badge/vue-3.3.2-brightgreen.svg" alt="vue">
   </a>
@@ -12,9 +22,25 @@
 
 ## 介绍
 
-l-admin 是一个管理系统的前端解决方案，l-admin-vue 基于 [vue](https://github.com/vuejs/core) 和 [ant-design-vue](https://github.com/vueComponent/ant-design-vue) 实现。支持在线主题色切换，支持在线多语言切换，支持动态路由，动态菜单，菜单权限控制，操作权限控制
+`l-admin-vue` 是 `l-admin` 基于 [vue3](https://github.com/vuejs/core) 和 [ant-design-vue](https://github.com/vueComponent/ant-design-vue) 的实现
 
-## 在线示例
+## 特性
+
+- 在线主题色切换
+- 在线多语言切换
+- 懒加载
+- 基础路由
+- 动态路由（用户有多少菜单，则挂多少路由）
+- 登录跳转控制
+- 操作权限控制
+- 路由动画（自动切换）
+- 路由组件 keep-alive（自动处理）
+- 按模块拆分 server，各模块中复用
+- LESS
+- TSX
+- Typescript
+
+## 在线预览
 
 [预览](https://lb1129.github.io/l-admin-vue/)
 
@@ -54,7 +80,7 @@ npm run build
 下述命令行可对所有样式文件（忽略的排除在外）进行校验并对错误及警告尝试修复
 
 ```sh
-npm run stylelint
+npm run lint:style
 ```
 
 ## 脚本校验
