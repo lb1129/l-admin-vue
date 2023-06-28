@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://ng-alain.com">
+  <a href="https://lb1129.github.io/l-admin-vue/">
     <img width="100" src="https://github.com/lb1129/l-admin-vue/blob/master/src/assets/image/logo.svg">
   </a>
 </p>
