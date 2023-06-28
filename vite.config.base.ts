@@ -51,6 +51,15 @@ const config: UserConfig = {
         javascriptEnabled: true
       }
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          mockjs: ['mockjs']
+        }
+      }
+    }
   }
 }
 
