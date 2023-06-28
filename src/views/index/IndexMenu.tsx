@@ -24,7 +24,7 @@ export default defineComponent({
           // 根据菜单配置获取菜单图标
           const Icon = menu.icon
             ? defineAsyncComponent({
-                loader: () => import(`@ant-design/icons-vue/${menu.icon}.js`),
+                loader: () => import(`@ant-design/icons-vue/es/icons/${menu.icon}.js`),
                 errorComponent: FolderOutlined
               })
             : FolderOutlined
