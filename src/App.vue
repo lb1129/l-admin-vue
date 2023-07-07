@@ -75,6 +75,7 @@ watch(menuDataStore, () => {
           name: record.name,
           path: getChildrenPath(record.path),
           redirect,
+          meta: { needAuth: true, menuName: record.name },
           children: generateRoutes(children)
         })
       } else if (record.pageUrl) {
