@@ -66,18 +66,15 @@
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item
-            v-for="(item, index) in breadcrumbStore.breadcrumb"
-            :key="item.routeName"
-          >
-            <span v-if="index === breadcrumbStore.breadcrumb.length - 1">
+          <a-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.routeName">
+            <template v-if="index === breadcrumbs.length - 1">
               {{ t(item.menuName) }}
-            </span>
+            </template>
             <a
               v-else
               @click="
                 () => {
-                  router.go(index + 1 - breadcrumbStore.breadcrumb.length)
+                  router.push({ name: item.routeName })
                 }
               "
               >{{ t(item.menuName) }}</a
@@ -86,11 +83,11 @@
         </a-breadcrumb>
         <a-layout-content class="index-content">
           <router-view v-slot="{ Component }">
-            <transition mode="out-in" :name="transitionName">
-              <keep-alive :include="include">
-                <component :is="Component" />
-              </keep-alive>
-            </transition>
+            <!-- <transition mode="out-in" name="fade"> -->
+            <keep-alive :include="keepAliveInclude">
+              <component :is="Component" />
+            </keep-alive>
+            <!-- </transition> -->
           </router-view>
         </a-layout-content>
       </a-layout>
@@ -99,9 +96,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onBeforeMount } from 'vue'
+import { computed, ref, onBeforeMount, watchEffect } from 'vue'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Modal, message } from 'ant-design-vue'
 import 'ant-design-vue/es/modal/style'
@@ -110,8 +107,6 @@ import logoSvg from '@/assets/image/logo.svg'
 import userPng from '@/assets/image/user.png'
 import IndexMenu from './IndexMenu'
 import { tokenLocalforage } from '@/storage/localforage'
-import { useBreadcrumb } from '@/pinia/stores/breadcrumb'
-import { useRouteOperateState, RouteOperateState } from '@/pinia/stores/routeOperateState'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { logout } from '@/views/authenticate/servers'
 import { themeLocalforage } from '@/storage/localforage'
@@ -121,22 +116,24 @@ const systemName = import.meta.env.VITE_SYSTEM_NAME
 const collapsed = ref(false)
 const themeColor = ref('#1890ff')
 const pickerVisible = ref(false)
+const keepAliveInclude = ref<string[]>([])
 const { t } = useI18n()
 const router = useRouter()
-const breadcrumbStore = useBreadcrumb()
-const routeOperateStateStore = useRouteOperateState()
+const route = useRoute()
 const userInfoStore = useUserInfo()
 
-const transitionName = computed(() => {
-  return routeOperateStateStore.routeOperateState === RouteOperateState.forward
-    ? 'slide-left'
-    : routeOperateStateStore.routeOperateState === RouteOperateState.back
-    ? 'slide-right'
-    : 'fade'
+const breadcrumbs = computed(() => {
+  return route.matched.slice(1).map((item) => ({
+    routeName: item.name,
+    menuName: item.meta.menuName ?? ''
+  }))
 })
 
-const include = computed(() => {
-  return breadcrumbStore.breadcrumb.map((item) => item.routeName)
+watchEffect(() => {
+  const record = route.matched[route.matched.length - 1]
+  if (!record.meta.hidden) {
+    keepAliveInclude.value = [record.name as string]
+  }
 })
 
 const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
