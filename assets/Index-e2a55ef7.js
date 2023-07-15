@@ -1,0 +1,1 @@
+import{_ as e,g as _,o as t}from"./index-5ccd5c73.js";import"./mockjs-1791cf1e.js";const c={},n={class:"personal-center"};function o(s,a){return t(),_("div",n,"个人中心")}const p=e(c,[["render",o],["__scopeId","data-v-5a0d4e76"]]);export{p as default};
