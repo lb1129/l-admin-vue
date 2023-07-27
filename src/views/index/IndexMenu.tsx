@@ -1,6 +1,6 @@
 import { computed, defineComponent, defineAsyncComponent, ref, watchEffect, type VNode } from 'vue'
 import { useMenuData } from '@/pinia/stores/menuData'
-import type { MenuDataItemType } from '@/views/personal-center/types'
+import type { MenuDataItemType } from '@/types/menu'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { type MenuInfo } from 'ant-design-vue/es/menu/src/interface'

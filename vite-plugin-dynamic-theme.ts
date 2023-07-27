@@ -105,7 +105,11 @@ function vitePluginDynamicTheme(color: string): PluginOption {
               const styleBlockHadColorArr = styleBlockArr.filter((block) =>
                 matchColors.some((color) => block.indexOf(color) > -1)
               )
-              if (styleBlockHadColorArr.length) {
+              if (
+                styleBlockHadColorArr.length &&
+                // 排除 ant-btn:hover
+                code.slice(idx, selectorEndIdx + 1).indexOf('.ant-btn:hover') === -1
+              ) {
                 // 将样式区块加入结果中
                 result += `${code.slice(idx, selectorEndIdx + 1)}${styleBlockHadColorArr.join(
                   ';'

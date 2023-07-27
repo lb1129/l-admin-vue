@@ -7,7 +7,6 @@ import httpPlugin from '@/plugins/http'
 import i18n from '@/i18n'
 import pinia from '@/pinia'
 import '@/assets/style/global.less'
-import '@/mock'
 
 const app = createApp(App)
 

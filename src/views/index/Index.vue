@@ -37,8 +37,8 @@
         </a-dropdown>
         <a-dropdown>
           <span class="index-header-right-item index-header-right-item_user">
-            <a-avatar size="small" :src="userPng" />
-            <span style="margin-left: 8px">{{ userInfoStore.userInfo.userName }}</span>
+            <a-avatar size="small" :src="userInfoStore.userInfo.avatar" />
+            <span style="margin-left: 8px">{{ userInfoStore.userInfo.nickname }}</span>
           </span>
           <template #overlay>
             <a-menu @click="topRightMenuItemClickHandle">
@@ -104,11 +104,10 @@ import { Modal, message } from 'ant-design-vue'
 import 'ant-design-vue/es/modal/style'
 import 'ant-design-vue/es/message/style'
 import logoSvg from '@/assets/image/logo.svg'
-import userPng from '@/assets/image/user.png'
 import IndexMenu from './IndexMenu'
 import { tokenLocalforage } from '@/storage/localforage'
 import { useUserInfo } from '@/pinia/stores/userInfo'
-import { logout } from '@/views/authenticate/servers'
+import { logoutServe } from '@/serves/auth'
 import { themeLocalforage } from '@/storage/localforage'
 import { toggleThemeColor } from '@/utils/themeColor'
 
@@ -146,7 +145,7 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
         onOk: async function () {
           message.loading(t('signingOutPleaseWait'), 0)
           try {
-            await logout()
+            await logoutServe()
             await tokenLocalforage.clear()
             message.destroy()
             router.replace({

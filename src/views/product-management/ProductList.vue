@@ -5,7 +5,7 @@
       :dataSource="dataSource"
       :columns="columns"
       bordered
-      row-key="id"
+      row-key="_id"
       :scroll="{ x: 1200, y: height }"
       :row-selection="{
         selectedRowKeys,
@@ -45,7 +45,7 @@
               (value = '') => {
                 if (queryParams.keyword !== value) {
                   queryParams.keyword = value
-                  queryParams.pagination.pageNo = 1
+                  queryParams.pageNo = 1
                 }
               }
             "
@@ -66,7 +66,7 @@
         <template v-if="column.key === 'name'">
           <link-plus
             :disabled="operateAuthValueToDisabled(operateAuth.detail)"
-            :to="{ name: 'ProductDetail', params: { id: record.id } }"
+            :to="{ name: 'ProductDetail', params: { id: record._id } }"
             >{{ record.name }}</link-plus
           >
         </template>
@@ -74,14 +74,14 @@
           <a-button
             type="link"
             :disabled="operateAuthValueToDisabled(operateAuth.edit)"
-            @click="addOrEditHandle(record.id)"
+            @click="addOrEditHandle(record._id)"
             >{{ t('edit') }}</a-button
           >
           <a-divider type="vertical" />
           <a-popconfirm
             :disabled="operateAuthValueToDisabled(operateAuth.delete)"
             :title="$t('areYouSureDelete')"
-            @confirm="deleteHandle(record.id)"
+            @confirm="deleteHandle(record._id)"
           >
             <a-button type="link" :disabled="operateAuthValueToDisabled(operateAuth.delete)">{{
               t('delete')
@@ -102,8 +102,8 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useResize } from '@/utils/useResize'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
-import { getProducts, deleteProductByIds } from './servers'
-import type { ProductType, ProductsQueryParamsType } from './types'
+import { getProductsServe, deleteProductByIdsServe } from '@/serves/product'
+import type { ProductType, ProductsQueryParamsType } from '@/types/product'
 import type { Key } from 'ant-design-vue/es/table/interface'
 import pubsub from '@/pubsub'
 import { productEditDone } from '@/pubsub/events'
@@ -181,10 +181,8 @@ const columns = ref<TableColumnType<ProductType>[]>([
 const dataSource = ref<ProductType[]>([])
 const total = ref(0)
 const queryParams = reactive<ProductsQueryParamsType>({
-  pagination: {
-    pageNo: 1,
-    pageSize: 10
-  },
+  pageNo: 1,
+  pageSize: 10,
   keyword: ''
 })
 const router = useRouter()
@@ -204,7 +202,7 @@ const deleteHandle = async (id?: string) => {
   const ids = id ? [id] : selectedRowKeys.value
   dataLoading.value = true
   try {
-    await deleteProductByIds(ids)
+    await deleteProductByIdsServe(ids)
     message.success(t('whatSuccess', [t('delete')]))
     loadData()
   } catch (error) {
@@ -212,14 +210,14 @@ const deleteHandle = async (id?: string) => {
   }
 }
 const changeHandle: TableProps<ProductType>['onChange'] = (pagination, filters, sorter) => {
-  queryParams.pagination.pageNo = pagination.current as number
-  queryParams.pagination.pageSize = pagination.pageSize as number
+  queryParams.pageNo = pagination.current as number
+  queryParams.pageSize = pagination.pageSize as number
 }
 
 const tablePaginationConfig = computed(() => ({
   total: total.value,
-  current: queryParams.pagination.pageNo,
-  pageSize: queryParams.pagination.pageSize,
+  current: queryParams.pageNo,
+  pageSize: queryParams.pageSize,
   showTotal: (total: number) => t('whatTotal', [total]),
   showSizeChanger: true,
   showLessItems: true,
@@ -229,7 +227,7 @@ const tablePaginationConfig = computed(() => ({
 const loadData = async () => {
   dataLoading.value = true
   try {
-    const res = await getProducts(queryParams)
+    const res = await getProductsServe(queryParams)
     dataSource.value = res.data.data
     total.value = res.data.total
     dataLoading.value = false

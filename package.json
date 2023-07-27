@@ -16,9 +16,11 @@
   },
   "dependencies": {
     "@ant-design/colors": "^7.0.0",
+    "@vueuse/core": "^10.2.1",
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
     "echarts": "^5.4.2",
+    "jsencrypt": "^3.3.2",
     "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",

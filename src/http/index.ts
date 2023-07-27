@@ -5,7 +5,6 @@ import 'ant-design-vue/es/message/style'
 import { tokenLocalforage } from '@/storage/localforage'
 import isAuthenticated from '@/router/isAuthenticated'
 import i18n from '@/i18n'
-import queryString from 'query-string'
 import router from '@/router'
 
 export interface IResponse<T> {
@@ -20,16 +19,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    // server是mock的
-    if (import.meta.env.VITE_SERVER_IS_MOCK === 'true') {
-      config.url = queryString.stringifyUrl({
-        url: config.url as string,
-        query: {
-          authorization: await tokenLocalforage.get()
-        }
-      })
-    }
-    config.headers.Authorization = await tokenLocalforage.get()
+    const token = await tokenLocalforage.get()
+    if (token) config.headers.Authorization = `Bearer ${token}`
     config.headers['Accept-Language'] = i18n.global.locale.value
     return config
   },
@@ -40,26 +31,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   async (response) => {
-    // server是mock的
-    if (import.meta.env.VITE_SERVER_IS_MOCK === 'true') {
-      if (response.data.status >= 200 && response.data.status < 300) {
-        return response.data.data
-      } else {
-        // 401 未登录
-        if (response.data.status === 401) {
-          if (router.currentRoute.value.meta.needAuth === true) {
-            isAuthenticated.value = Promise.reject()
-            await tokenLocalforage.clear()
-            router.replace({
-              name: 'Login'
-            })
-          }
-        } else {
-          message.error(response.data.data.message)
-        }
-        return Promise.reject(response.data.data.message)
-      }
-    }
     return response.data
   },
   async (error) => {
@@ -73,7 +44,7 @@ axiosInstance.interceptors.response.use(
         })
       }
     } else {
-      message.error(error.response.data.message)
+      message.error(error.response.data.errMsg)
     }
     return Promise.reject(error)
   }

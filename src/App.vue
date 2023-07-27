@@ -1,5 +1,6 @@
 <template>
   <a-config-provider :locale="aLocale" :input="{ autocomplete: 'off' }">
+    <page-loading v-if="!routerIsReady" />
     <router-view />
   </a-config-provider>
 </template>
@@ -8,14 +9,15 @@
 import { watch, watchEffect, ref, onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMenuData } from '@/pinia/stores/menuData'
-import type { MenuDataItemType } from '@/views/personal-center/types'
+import type { MenuDataItemType } from '@/types/menu'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useRouter, type RouteRecordRaw } from 'vue-router'
 import { getChildrenPath } from '@/router/tools'
 import { lazyLoad } from '@/router/tools'
 import { initThemeColor } from '@/utils/themeColor'
-import { isLogin } from '@/views/authenticate/servers'
-import { getUserInfo, getMenu } from '@/views/personal-center/servers'
+import { isLoginServe } from '@/serves/auth'
+import { getUserInfoServe } from '@/serves/user'
+import { getMenuServe } from '@/serves/menu'
 import enUS from 'ant-design-vue/es/locale/en_US'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
@@ -25,9 +27,13 @@ import 'dayjs/locale/zh-cn'
 const { locale } = useI18n()
 const aLocale = ref<typeof enUS>()
 
+const routerIsReady = ref(false)
 const menuDataStore = useMenuData()
 const userInfoStore = useUserInfo()
 const router = useRouter()
+router.isReady().then(() => {
+  routerIsReady.value = true
+})
 
 watchEffect(() => {
   if (locale.value === 'en') {
@@ -42,13 +48,11 @@ watchEffect(() => {
 onBeforeMount(async () => {
   initThemeColor()
   try {
-    await isLogin()
-    const userInfoRes = await getUserInfo()
-    const menuRes = await getMenu()
+    await isLoginServe()
+    const userInfoRes = await getUserInfoServe()
+    const menuRes = await getMenuServe()
     // 更新pinia内的菜单数据
     menuDataStore.setMenuData(menuRes.data)
-    // 将pinia内菜单数据获取状态设置为完成
-    menuDataStore.setMenuDataDone(true)
     // 更新pinia内的用户信息
     userInfoStore.setUserInfo(userInfoRes.data)
     // 将pinia内菜单数据获取状态设置为完成

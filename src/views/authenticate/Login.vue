@@ -1,12 +1,8 @@
 <template>
   <Layout>
     <a-form :model="formState" @finish="onFinish">
-      <a-form-item name="userName" :rules="[{ required: true, message: $t('pleaseEnterAccount') }]">
-        <a-input
-          size="large"
-          :placeholder="$t('account') + 'admin/viho/user'"
-          v-model:value="formState.userName"
-        >
+      <a-form-item name="username" :rules="[{ required: true, message: $t('pleaseEnterAccount') }]">
+        <a-input size="large" :placeholder="$t('account')" v-model:value="formState.username">
           <template #prefix>
             <UserOutlined class="icon" />
           </template>
@@ -19,7 +15,7 @@
       >
         <a-input-password
           size="large"
-          :placeholder="$t('password') + 'a123456'"
+          :placeholder="$t('password')"
           v-model:value="formState.password"
         >
           <template #prefix>
@@ -54,11 +50,12 @@ import { useI18n } from 'vue-i18n'
 import { tokenLocalforage } from '@/storage/localforage'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { useMenuData } from '@/pinia/stores/menuData'
-import { login } from './servers'
-import { getMenu, getUserInfo } from '@/views/personal-center/servers'
+import { loginServe } from '@/serves/auth'
+import { getUserInfoServe } from '@/serves/user'
+import { getMenuServe } from '@/serves/menu'
 
 const formState = reactive({
-  userName: '',
+  username: '',
   password: ''
 })
 const loading = ref(false)
@@ -69,11 +66,11 @@ const menuDataStore = useMenuData()
 const onFinish = async () => {
   loading.value = true
   try {
-    const res = await login(formState)
+    const res = await loginServe(formState)
     // 存储token
     await tokenLocalforage.set(res.data)
-    const userInfoRes = await getUserInfo()
-    const menuRes = await getMenu()
+    const userInfoRes = await getUserInfoServe()
+    const menuRes = await getMenuServe()
     // 更新pinia内的菜单数据
     menuDataStore.setMenuData(menuRes.data)
     // 将pinia内菜单数据获取状态设置为完成
@@ -88,7 +85,7 @@ const onFinish = async () => {
       // 欢迎提示
       notification.success({
         message: t('welcome'),
-        description: userInfoRes.data.userName
+        description: userInfoRes.data.nickname
       })
     }, 200)
     loading.value = false

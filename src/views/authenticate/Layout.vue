@@ -51,7 +51,7 @@ const systemName = import.meta.env.VITE_SYSTEM_NAME
   }
 
   &-main {
-    width: 368px;
+    width: 400px;
     margin: 0 auto;
   }
 

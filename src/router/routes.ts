@@ -19,7 +19,22 @@ const routers: RouteRecordRaw[] = [
         path: 'personalCenter',
         name: 'PersonalCenter',
         component: lazyLoad('personal-center', 'Index'),
-        meta: { needAuth: true, menuName: 'personalCenter' }
+        meta: { needAuth: true, menuName: 'personalCenter' },
+        redirect: { name: 'BasicInfo' },
+        children: [
+          {
+            path: 'basicInfo',
+            name: 'BasicInfo',
+            component: lazyLoad('personal-center', 'BasicInfo'),
+            meta: { needAuth: true, menuName: 'basicInfo' }
+          },
+          {
+            path: 'securitySetting',
+            name: 'SecuritySetting',
+            component: lazyLoad('personal-center', 'SecuritySetting'),
+            meta: { needAuth: true, menuName: 'securitySetting' }
+          }
+        ]
       }
     ]
   },

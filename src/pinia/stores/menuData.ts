@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { MenuDataItemType } from '@/views/personal-center/types'
+import type { MenuDataItemType } from '@/types/menu'
 
 export const useMenuData = defineStore('menuData', () => {
   const menuData = ref<MenuDataItemType[]>([])
