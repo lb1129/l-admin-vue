@@ -56,7 +56,7 @@ const config: UserConfig = {
     rollupOptions: {
       output: {
         manualChunks: {
-          mockjs: ['mockjs']
+          // mockjs: ['mockjs']
         }
       }
     }
