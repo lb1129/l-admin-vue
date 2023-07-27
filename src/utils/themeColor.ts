@@ -1,5 +1,6 @@
 import { generate } from '@ant-design/colors'
 import { themeLocalforage } from '@/storage/localforage'
+import config from '@/config'
 
 export function toggleThemeColor(themeColor: string) {
   const style = document.getElementById('vite-plugin-dynamic-theme')
@@ -17,5 +18,5 @@ export function toggleThemeColor(themeColor: string) {
 
 export async function initThemeColor() {
   const themeColor = await themeLocalforage.get()
-  if (themeColor) toggleThemeColor(themeColor)
+  toggleThemeColor(themeColor || config.themeColor)
 }
