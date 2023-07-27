@@ -116,7 +116,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const title = computed(() => (route.params.id ? t('edit') : t('add')))
-const fileList = reactive<UploadFile[]>([])
+let fileList = reactive<UploadFile[]>([])
 
 const saveHandler = async () => {
   submitLoading.value = true
