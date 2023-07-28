@@ -84,7 +84,7 @@ const onFinish = async () => {
       nickname: formState.nickname,
       profile: formState.profile
     })
-    message.success(t('whatSuccess', [t('basicInfo')]))
+    message.success(t('whatSuccess', [t('updateBasicInfo')]))
     // 更新pinia
     userInfoStore.setUserInfo({
       nickname: formState.nickname,
