@@ -149,7 +149,7 @@ const getCodeHandler = async () => {
   codeLoading.value = true
   try {
     const values = await formRef.value?.validateFields('phone')
-    const res = await sendCodeServe(values?.phone)
+    const res = await sendCodeServe(Number(values?.phone))
     // NOTE 短信服务暂未接入运营商 先直接显示在前端
     phoneCode.value = res.data
     codeTime.value = 60
