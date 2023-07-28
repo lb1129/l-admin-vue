@@ -65,6 +65,7 @@ import { sendCodeServe } from '@/serves/other'
 import { setPhoneServe } from '@/serves/user'
 import { useI18n } from 'vue-i18n'
 import { message } from 'ant-design-vue'
+import { useCountDown } from '@/utils/useCountDown'
 
 const { t } = useI18n()
 const visible = ref(false)
@@ -72,12 +73,12 @@ const submitLoading = ref(false)
 const codeLoading = ref(false)
 const phoneCode = ref('')
 const formRef = ref<FormInstance>()
-const codeTime = ref(0)
 const formState = reactive({
   phone: '',
   code: ''
 })
 const userInfoStore = useUserInfo()
+const [codeTime, codeTimeRun, codeTimeReset] = useCountDown(60)
 const promise = Promise
 
 const codeText = computed(() =>
@@ -91,13 +92,7 @@ const getCodeHandler = async () => {
     const res = await sendCodeServe(values?.phone)
     // NOTE 短信服务暂未接入运营商 先直接显示在前端
     phoneCode.value = res.data
-    codeTime.value = 60
-    const timer = setInterval(() => {
-      if (codeTime.value <= 0) {
-        phoneCode.value = ''
-        clearInterval(timer)
-      } else codeTime.value--
-    }, 1000)
+    codeTimeRun()
     codeLoading.value = false
   } catch (e) {
     codeLoading.value = false
@@ -120,6 +115,11 @@ const modalOkHandler = async () => {
     })
     submitLoading.value = false
     visible.value = false
+    nextTick(() => {
+      formRef.value?.resetFields()
+      codeTimeReset()
+      phoneCode.value = ''
+    })
   } catch (error) {
     submitLoading.value = false
   }
@@ -128,6 +128,8 @@ const modalOkHandler = async () => {
 const modalCancelHandler = () => {
   nextTick(() => {
     formRef.value?.resetFields()
+    codeTimeReset()
+    phoneCode.value = ''
   })
 }
 </script>

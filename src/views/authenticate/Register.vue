@@ -119,6 +119,7 @@ import { sendCodeServe } from '@/serves/other'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { notification } from 'ant-design-vue'
+import { useCountDown } from '@/utils/useCountDown'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -126,7 +127,7 @@ const submitLoading = ref(false)
 const codeLoading = ref(false)
 const phoneCode = ref('')
 const formRef = ref<FormInstance>()
-const codeTime = ref(0)
+const [codeTime, codeTimeRun] = useCountDown(60)
 const formState = reactive<{
   username: string
   password: string
@@ -152,13 +153,7 @@ const getCodeHandler = async () => {
     const res = await sendCodeServe(Number(values?.phone))
     // NOTE 短信服务暂未接入运营商 先直接显示在前端
     phoneCode.value = res.data
-    codeTime.value = 60
-    const timer = setInterval(() => {
-      if (codeTime.value <= 0) {
-        phoneCode.value = ''
-        clearInterval(timer)
-      } else codeTime.value--
-    }, 1000)
+    codeTimeRun()
     codeLoading.value = false
   } catch (e) {
     codeLoading.value = false
