@@ -107,7 +107,7 @@ function vitePluginDynamicTheme(color: string): PluginOption {
               )
               if (
                 styleBlockHadColorArr.length &&
-                // 排除 ant-btn:hover
+                // NOTE 排除 ant-btn:hover (可抽取成配置参数)
                 code.slice(idx, selectorEndIdx + 1).indexOf('.ant-btn:hover') === -1
               ) {
                 // 将样式区块加入结果中
@@ -132,6 +132,11 @@ function vitePluginDynamicTheme(color: string): PluginOption {
     }
     return result
   }
+  // NOTE 额外要处理的样式 (可抽取成配置参数)
+  const extraStyle = `.ant-btn:not(.ant-btn-primary):hover, .ant-btn:not(.ant-btn-primary):focus{
+    color: #40a9ff;
+    border-color: #40a9ff;
+  }`
   return {
     name: 'vite-plugin-dynamic-theme',
     transformIndexHtml() {
@@ -143,7 +148,7 @@ function vitePluginDynamicTheme(color: string): PluginOption {
             'data-color': colors[5],
             id: 'vite-plugin-dynamic-theme'
           },
-          children: styleStr,
+          children: `${styleStr}${extraStyle}`,
           injectTo: 'body'
         }
       ]
