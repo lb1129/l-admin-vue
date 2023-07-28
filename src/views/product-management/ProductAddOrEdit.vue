@@ -71,9 +71,11 @@
                 multiple
                 v-model:file-list="fileList"
                 :custom-request="customRequestHandler"
+                :max-count="5"
+                :before-upload="beforeUploadHandler"
                 @remove="uploadRemoveHandler"
               >
-                <plus-outlined v-if="canUpload"></plus-outlined>
+                <plus-outlined v-if="fileList.length < 5"></plus-outlined>
               </a-upload>
             </a-form-item>
           </a-col>
@@ -88,7 +90,7 @@ import { ref, computed, onMounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { message } from 'ant-design-vue'
-import type { UploadFile, FormInstance } from 'ant-design-vue'
+import type { UploadFile, FormInstance, UploadProps } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style'
 import { getProductByIdServe, saveProductServe } from '@/serves/product'
 import type { ProductType } from '@/types/product'
@@ -116,7 +118,7 @@ const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 const title = computed(() => (route.params.id ? t('edit') : t('add')))
-let fileList = reactive<UploadFile[]>([])
+const fileList = ref<UploadFile[]>([])
 
 const saveHandler = async () => {
   submitLoading.value = true
@@ -124,7 +126,7 @@ const saveHandler = async () => {
     await formRef.value?.validateFields()
     const images: string[] = []
     // 取出状态为success的url
-    fileList.forEach((file) => {
+    fileList.value.forEach((file) => {
       if (file.status === 'success') images.push(file.url as string)
     })
     await saveProductServe({
@@ -140,37 +142,43 @@ const saveHandler = async () => {
   }
 }
 
+const beforeUploadHandler: UploadProps['beforeUpload'] = (file, files) => {
+  const len = fileList.value.length
+  const canUploadFiles = files.slice(0, 5 - len)
+  return canUploadFiles.some((item) => item.uid === file.uid)
+}
+
 const customRequestHandler = async (ops: UploadRequestOption) => {
-  if (fileList.length >= 5) return
-  let record: UploadFile = {
-    uid: (ops.file as RcFile).uid,
-    name: '',
-    status: 'uploading',
-    url: ''
-  }
-  fileList.push(record)
+  const uid = (ops.file as RcFile).uid
   try {
     const url = await uploadServe(ops.file as File, (percent) => {
       ops.onProgress && ops.onProgress({ percent: percent })
     })
     ops.onSuccess && ops.onSuccess(url)
-    const idx = fileList.findIndex((item) => item.uid === record.uid)
+    const idx = fileList.value.findIndex((item) => item.uid === uid)
     if (idx > -1) {
-      fileList.splice(idx, 1, { ...record, url, status: 'success' })
+      fileList.value.splice(idx, 1, {
+        uid,
+        name: '',
+        status: 'success',
+        url
+      })
     }
   } catch (error) {
-    const idx = fileList.findIndex((item) => item.uid === record.uid)
+    const idx = fileList.value.findIndex((item) => item.uid === uid)
     if (idx > -1) {
-      fileList.splice(idx, 1, { ...record, status: 'error' })
+      fileList.value.splice(idx, 1, {
+        uid,
+        name: '',
+        status: 'error',
+        url: ''
+      })
     }
   }
 }
 
-const canUpload = computed(() => fileList.length < 5)
-
 const uploadRemoveHandler = (file: UploadFile) => {
-  const idx = fileList.findIndex((item) => item.uid === file.uid)
-  if (idx > -1) fileList.splice(idx, 1)
+  fileList.value = fileList.value.filter((item) => item.uid !== file.uid)
 }
 
 onMounted(async () => {
@@ -179,14 +187,12 @@ onMounted(async () => {
     try {
       const res = await getProductByIdServe(route.params.id as string)
       Object.assign(details, res.data)
-      details.images.forEach((url, idx) => {
-        fileList.push({
-          uid: `${idx}`,
-          name: '',
-          url,
-          status: 'success'
-        })
-      })
+      fileList.value = details.images.map((url, idx) => ({
+        uid: `${idx}`,
+        name: '',
+        url,
+        status: 'success'
+      }))
       dataLoading.value = false
     } catch (error) {
       dataLoading.value = false
