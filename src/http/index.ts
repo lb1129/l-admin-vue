@@ -9,7 +9,8 @@ import router from '@/router'
 
 export interface IResponse<T> {
   data: T
-  message: string
+  errCode: number
+  errMsg: string
 }
 
 const axiosInstance = axios.create({
@@ -44,7 +45,9 @@ axiosInstance.interceptors.response.use(
         })
       }
     } else {
-      message.error(error.response.data.errMsg)
+      const data = error.response.data
+      if (data.errMsg) message.error(data.errMsg)
+      else if (data.error) message.error(data.error.message)
     }
     return Promise.reject(error)
   }
