@@ -56,6 +56,7 @@ onBeforeMount(async () => {
     // 将pinia内菜单数据获取状态设置为完成
     menuDataStore.setMenuDataDone(true)
   } catch (error) {
+    hiddenInitLoading.value = true
     // 将pinia内菜单数据获取状态设置为完成
     menuDataStore.setMenuDataDone(true)
   }
