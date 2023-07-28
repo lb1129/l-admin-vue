@@ -1,6 +1,6 @@
 <template>
   <a-config-provider :locale="aLocale" :input="{ autocomplete: 'off' }">
-    <page-loading v-if="!routerIsReady" />
+    <page-loading v-if="!hiddenInitLoading" />
     <router-view />
   </a-config-provider>
 </template>
@@ -27,13 +27,10 @@ import 'dayjs/locale/zh-cn'
 const { locale } = useI18n()
 const aLocale = ref<typeof enUS>()
 
-const routerIsReady = ref(false)
+const hiddenInitLoading = ref(false)
 const menuDataStore = useMenuData()
 const userInfoStore = useUserInfo()
 const router = useRouter()
-router.isReady().then(() => {
-  routerIsReady.value = true
-})
 
 watchEffect(() => {
   if (locale.value === 'en') {
@@ -49,6 +46,7 @@ onBeforeMount(async () => {
   initThemeColor()
   try {
     await isLoginServe()
+    hiddenInitLoading.value = true
     const userInfoRes = await getUserInfoServe()
     const menuRes = await getMenuServe()
     // 更新pinia内的菜单数据
