@@ -73,8 +73,6 @@ const onFinish = async () => {
     const menuRes = await getMenuServe()
     // 更新pinia内的菜单数据
     menuDataStore.setMenuData(menuRes.data)
-    // 将pinia内菜单数据获取状态设置为完成
-    menuDataStore.setMenuDataDone(true)
     // 更新pinia内的用户信息
     userInfoStore.setUserInfo(userInfoRes.data)
     // 跳转首页
