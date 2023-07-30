@@ -17,6 +17,10 @@ export function toggleThemeColor(themeColor: string) {
 }
 
 export async function initThemeColor() {
+  toggleThemeColor(await getThemeColor())
+}
+
+export async function getThemeColor() {
   const themeColor = await themeLocalforage.get()
-  toggleThemeColor(themeColor || config.themeColor)
+  return themeColor || config.themeColor
 }

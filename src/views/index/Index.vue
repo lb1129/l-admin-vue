@@ -108,18 +108,21 @@ import IndexMenu from './IndexMenu'
 import { tokenLocalforage } from '@/storage/localforage'
 import { useUserInfo } from '@/pinia/stores/userInfo'
 import { logoutServe } from '@/serves/auth'
-import { themeLocalforage } from '@/storage/localforage'
-import { toggleThemeColor } from '@/utils/themeColor'
+import { toggleThemeColor, getThemeColor } from '@/utils/themeColor'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
 const collapsed = ref(false)
-const themeColor = ref('#1890ff')
+const themeColor = ref('')
 const pickerVisible = ref(false)
 const keepAliveInclude = ref<string[]>([])
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const userInfoStore = useUserInfo()
+
+onBeforeMount(async () => {
+  themeColor.value = await getThemeColor()
+})
 
 const breadcrumbs = computed(() => {
   return route.matched.slice(1).map((item) => ({
@@ -164,11 +167,6 @@ const topRightMenuItemClickHandle = (menuInfo: MenuInfo) => {
       break
   }
 }
-
-onBeforeMount(async () => {
-  const val = await themeLocalforage.get()
-  if (val) themeColor.value = val
-})
 </script>
 <style scoped lang="less">
 .index {
