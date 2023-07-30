@@ -1,0 +1,1 @@
+import{r as n,a0 as r}from"./index-8c2c8a7d.js";const c=e=>/^1[3456789]\d{9}$/.test(e),l=e=>/^[a-zA-Z0-9]{7,10}$/.test(e),i=e=>{const t=n(0);let s;return r(()=>{clearInterval(s)}),[t,()=>{t.value=e,s=window.setInterval(()=>{--t.value},1e3)},()=>{t.value=0,clearInterval(s)}]};export{c as a,l as i,i as u};

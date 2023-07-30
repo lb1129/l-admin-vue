@@ -1,0 +1,1 @@
+import{_ as c,g as e,o}from"./index-8c2c8a7d.js";const r={};function n(t,a){return o(),e("div",null,"隐私政策")}const _=c(r,[["render",n]]);export{_ as default};
