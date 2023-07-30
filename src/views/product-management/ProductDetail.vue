@@ -39,14 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuth, operateAuthValueToDisabled } from '@/utils/useAuth'
 import { getProductByIdServe } from '@/serves/product'
 import type { ProductType } from '@/types/product'
-import pubsub from '@/pubsub'
-import { productEditDone } from '@/pubsub/events'
 
 const dataLoading = ref(false)
 const details = ref<ProductType>({
@@ -80,11 +78,6 @@ const loadData = async () => {
 
 onMounted(() => {
   loadData()
-  pubsub.on(productEditDone, loadData)
-})
-
-onUnmounted(() => {
-  pubsub.off(productEditDone, loadData)
 })
 </script>
 
