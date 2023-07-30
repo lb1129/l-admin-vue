@@ -73,7 +73,6 @@
                 :custom-request="customRequestHandler"
                 :max-count="5"
                 :before-upload="beforeUploadHandler"
-                @remove="uploadRemoveHandler"
               >
                 <plus-outlined v-if="fileList.length < 5"></plus-outlined>
               </a-upload>
@@ -165,6 +164,7 @@ const customRequestHandler = async (ops: UploadRequestOption) => {
       })
     }
   } catch (error) {
+    ops.onError && ops.onError({ name: '', message: 'error' })
     const idx = fileList.value.findIndex((item) => item.uid === uid)
     if (idx > -1) {
       fileList.value.splice(idx, 1, {
@@ -175,10 +175,6 @@ const customRequestHandler = async (ops: UploadRequestOption) => {
       })
     }
   }
-}
-
-const uploadRemoveHandler = (file: UploadFile) => {
-  fileList.value = fileList.value.filter((item) => item.uid !== file.uid)
 }
 
 onMounted(async () => {
