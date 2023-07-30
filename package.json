@@ -20,6 +20,7 @@
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
     "echarts": "^5.4.2",
+    "fast-xml-parser": "^4.2.6",
     "jsencrypt": "^3.3.2",
     "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
