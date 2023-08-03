@@ -71,14 +71,14 @@ const onFinish = async () => {
     await tokenLocalforage.set(res.data)
     const userInfoRes = await getUserInfoServe()
     const menuRes = await getMenuServe()
-    // 更新pinia内的菜单数据
-    menuDataStore.setMenuData(menuRes.data)
-    // 更新pinia内的用户信息
-    userInfoStore.setUserInfo(userInfoRes.data)
     // 跳转首页
     await router.replace({
       name: 'Home'
     })
+    // 更新pinia内的菜单数据
+    menuDataStore.setMenuData(menuRes.data)
+    // 更新pinia内的用户信息
+    userInfoStore.setUserInfo(userInfoRes.data)
     setTimeout(() => {
       // 欢迎提示
       notification.success({
