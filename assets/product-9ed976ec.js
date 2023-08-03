@@ -1,0 +1,1 @@
+import{D as t,F as s,G as a,H as o,J as d}from"./index-7f7a3af3.js";const c=e=>t.get(s,{params:{id:e}}),p=e=>t.post(o,e),_=e=>t.delete(d,{data:{ids:e}}),u=e=>t.post(a,e);export{u as a,_ as d,c as g,p as s};
