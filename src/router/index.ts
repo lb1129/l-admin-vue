@@ -6,7 +6,7 @@ const createHistory =
   import.meta.env.VITE_NOT_SUPPORT_HISTORY === 'true' ? createWebHashHistory : createWebHistory
 
 const router = createRouter({
-  history: createHistory(import.meta.env.BASE_URL),
+  history: createHistory(import.meta.env.VITE_PUBLIC_URL),
   routes
 })
 

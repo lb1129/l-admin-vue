@@ -2,7 +2,7 @@
   <a-layout class="index">
     <a-layout-header class="index-header">
       <div class="index-header-logo">
-        <a href="/">
+        <a :href="publicUrl">
           <img :src="logoSvg" alt="logo" />
           {{ systemName }}
         </a>
@@ -111,6 +111,7 @@ import { logoutServe } from '@/serves/auth'
 import { toggleThemeColor, getThemeColor } from '@/utils/themeColor'
 
 const systemName = import.meta.env.VITE_SYSTEM_NAME
+const publicUrl = import.meta.env.VITE_PUBLIC_URL
 const collapsed = ref(false)
 const themeColor = ref('')
 const pickerVisible = ref(false)
