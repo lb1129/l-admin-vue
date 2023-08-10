@@ -110,7 +110,10 @@ watch(menuDataStore, () => {
       name: 'NotFound',
       component: lazyLoad('sundry', 'NotFound')
     })
-    router.replace(router.currentRoute.value.fullPath)
+    // 完成初始导航后 触发重新匹配
+    router.isReady().then(() => {
+      router.replace(router.currentRoute.value.fullPath)
+    })
   }
 })
 </script>
